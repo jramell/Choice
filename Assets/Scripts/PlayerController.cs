@@ -7,16 +7,22 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour {
 
+	#region Walk Settings definition
 	[Header("Walk settings")]
 	public float speed = 10f;
+	#endregion
 
+	#region Jump Settings definition
 	[Header("Jump Settings")]
 
 	//Time to apex in seconds
 	public float timeToApex = 0.5f;
 
-	//Jump height in meters/Unity Units
-	public float jumpHeight = 10f;
+	//Max jump height in meters/Unity Units
+	public float maxJumpHeight = 10f;
+
+	//Min jump height in meters/Unity Units
+	public float minJumpHeight = 5f; //In case of early jump termination
 
 	///<summary>
 	///Layers in this LayerMask are considered ground. If the player is colliding with them, they'll be considered grounded.
@@ -28,25 +34,36 @@ public class PlayerController : MonoBehaviour {
 	/// If a layer within WhatIsMask is close enough to this position, the player will be considered grounded. Would normally
 	/// correspond to the player's feet.
 	/// </summary>
-	[Tooltip("If an object in a layer within WhatIsMask is close enough to this position, the player will be considered grounded. Would normally orrespond to the player's feet")]
-	public Transform groundCheck; 
+	[SerializeField]
+	[Tooltip("If object within WhatIsMask is closer than groundCheckDistance to any position in this list, the player will be considered grounded. There would normally be groundChecks in the player's feet")]
+	private Transform[] groundChecks; 
 
 	/// <summary>
 	/// If groundCheck is at this distance or less from an object in a layer within WhatIsMask, the player will be considered grounded
 	/// </summary>
+	[SerializeField]
 	[Tooltip("If groundCheck is at this distance or less from an object in a layer within WhatIsMask, the player will be considered grounded")]
-	public float groundCheckRadius = 0.15f;
+	private float groundCheckDistance = 0.15f;
+	#endregion
 
+	#region Debug Settings definition
+	[SerializeField]
+	[Header("Debug Settings")]
+	private bool debugJump = true;
+	#endregion
 
-	//Private
-
-
+	#region Internal variables definition
 	/// <summary>
-	/// Y-axis velocity of the player when they jump
+	/// Y-axis velocity of the player when they jump. Calculated in Start() according to maxJumpHeight and timeToApex.
 	/// </summary>
-	private float jumpVelocity = 250f;
+	private float jumpVelocity = 0f;
 
 	private bool isGrounded = false;
+
+	/// <summary>
+	/// Y-axis velocity the player needs to reach 
+	/// </summary>
+	private float earlyJumpTerminationVelocity = 0f;
 
 	/// <summary>
 	/// Target velocity of the current frame. Is modified according to the actions the player wants to take.
@@ -57,32 +74,62 @@ public class PlayerController : MonoBehaviour {
 	/// Reference to the player's rigidbody2D.
 	/// </summary>
 	private Rigidbody2D rigidbody2D;
+	#endregion
 
 	void Start() {
 		rigidbody2D = GetComponent<Rigidbody2D>();	
-		timeToApex *= 10; //convert timeToApex
-		jumpHeight *= 10;
-		rigidbody2D.gravityScale = (2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
-		jumpVelocity = Mathf.Sqrt(2 * rigidbody2D.gravityScale * jumpHeight);
+		timeToApex *= 10; //change unit of timeToApex so the following equations work correctly
+		maxJumpHeight *= 10; //change unit of maxJumpHeight so the following equations work correctly
+		minJumpHeight *= 10; //change unit of minJumpHeight so the following equations work correctly
+		rigidbody2D.gravityScale = (2 * maxJumpHeight) / Mathf.Pow(timeToApex, 2);
+		jumpVelocity = Mathf.Sqrt(2 * rigidbody2D.gravityScale * maxJumpHeight);
+		earlyJumpTerminationVelocity = Mathf.Sqrt (
+			Mathf.Pow(jumpVelocity, 2) + -2 * rigidbody2D.gravityScale * (maxJumpHeight - minJumpHeight) );
 	}
 
-	void Update () {
+	void Update() {
 		UpdateInternalState();
 		ProcessInput();
 		rigidbody2D.velocity = targetVelocity;
 	}
 
-	//Resets targetVelocity this frame and checks if the player is grounded. 
+	/// <summary>
+	/// Resets targetVelocity this frame and checks if the player is grounded. 
+	/// </summary>
 	private void UpdateInternalState() {
 		targetVelocity = rigidbody2D.velocity;
-		isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, WhatIsGround);
+		UpdateIsGrounded();
 	}
 
-	//Updates horizontal movement and jumps according to input.
+	/// <summary>
+	/// Resets targetVelocity this frame and checks if the player is grounded. 
+	/// </summary>
 	private void ProcessInput() {
-		targetVelocity.x = Input.GetAxis ("Horizontal") * speed * Time.deltaTime;
+		targetVelocity.x = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+		ProcessJumpInput();
+	}
+
+	/// <summary>
+	/// Updates isGrounded according to the player position in the current frame
+	/// </summary>
+	private void UpdateIsGrounded() {
+		isGrounded = false;
+		for(int i = 0; i < groundChecks.Length && !isGrounded; i++) { 
+			isGrounded = Physics2D.Raycast(groundChecks[i].position, Vector2.down, groundCheckDistance, WhatIsGround);
+			if (debugJump) {
+				Debug.DrawRay(groundChecks[i].position, Vector2.down * groundCheckDistance, Color.red);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Checks if the player can jump and wants to jump 
+	/// </summary>
+	void ProcessJumpInput() {
 		if (CanJump() && PlayerWantsToJump()) {
 			Jump();
+		} else if (!isGrounded && PlayerWantsToInterruptJump()) {
+			targetVelocity.y = Mathf.Min(targetVelocity.y, earlyJumpTerminationVelocity);
 		}
 	}
 
@@ -92,6 +139,10 @@ public class PlayerController : MonoBehaviour {
 
 	bool PlayerWantsToJump() {
 		return Input.GetKeyDown(KeyCode.Space);
+	}
+
+	bool PlayerWantsToInterruptJump() {
+		return Input.GetKeyUp(KeyCode.Space);
 	}
 
 	void Jump() {
