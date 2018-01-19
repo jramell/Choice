@@ -91,6 +91,7 @@ public class PlayerController : MonoBehaviour {
 		UpdateInternalState();
 		ProcessInput();
 		rigidbody2D.velocity = targetVelocity;
+
 	}
 
 	/// <summary>
