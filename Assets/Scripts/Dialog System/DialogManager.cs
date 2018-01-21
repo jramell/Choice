@@ -23,12 +23,10 @@ public class DialogManager : MonoBehaviour {
 	[Tooltip("Animator of the UI part of the dialog")]
 	public Animator dialogBoxAnimator;
 
-	[Tooltip("Prompt that appears when a dialog is available")]
-	public GameObject dialogAvailablePrompt;
-
 	private static DialogManager instance;
 	private Dialog currentDialog;
 	private bool isDrawing = false;
+	private Coroutine drawingCoroutine;
 
 	void Awake() {
 		if(instance == null) {
@@ -47,35 +45,33 @@ public class DialogManager : MonoBehaviour {
 		get { return isDrawing; }
 	}
 
-	public void SetDialogAvailable(bool available) {
-		dialogAvailablePrompt.SetActive(available);
-	}
-
 	/// <summary>
-	/// Starts and displays the conversation passed as a parameter. This conversation will override the current conversation
-	/// being displayed, if any. After calling this, 
+	/// If no conversation is active, displays the dialog passed as a parameter in a new conversation. If a conversation is already
+	/// active and the dialog is not null, displays the dialog as part of the conversation. If the dialog is null, finishes the current
+	/// conversation or does nothing when no conversation is active.
 	/// </summary>
 	/// <param name="conversation">Conversation.</param>
-	public void StartDialog(Dialog dialog) {
+	public void AdvanceDialog(Dialog dialog) {
 		if (dialog == null) {
 			FinishConversation();
 			return;
 		}
 		if (!IsInConversation()) {
 			dialogBoxAnimator.SetBool("Open", true);
-			if(dialog.useNPCVoiceSFX) {
-				dialog.Interlocutor.voiceSFX.Play(); //SFX is NPC's voice
-			} else {
-				dialog.soundEffect.Play(); //SFX is the custom one defined in the dialog
-			}
+			dialogText.gameObject.SetActive(true); //for performance, as noted in 
 		}
+		if(dialog.useNPCVoiceSFX) {
+			dialog.Interlocutor.voiceSFX.Play(); //SFX is NPC's voice
+		} else {
+			dialog.soundEffect.Play(); //SFX is the custom one defined in the dialog
+		}
+		InteractionManager.Instance.RegisterActiveInteraction(Interaction.Type.Talk);
 		currentDialog = dialog;
 		DisplayCurrentDialog();
-		SetDialogAvailable(false);
 	}
 
 	private void DisplayCurrentDialog()  {
-		StartCoroutine(DrawDialogCharacters());
+		drawingCoroutine = StartCoroutine(DrawDialogCharacters());
 	}
 
 	public void SkipCurrentDialog() {
@@ -84,8 +80,9 @@ public class DialogManager : MonoBehaviour {
 	}
 
 	private void AbortDrawingCharacters() {
-		StopCoroutine(DrawDialogCharacters());
-		isDrawing = false;
+		StopCoroutine(drawingCoroutine);
+		drawingCoroutine = null;
+		isDrawing = false; 
 	}
 
 	/// <summary>
@@ -96,18 +93,18 @@ public class DialogManager : MonoBehaviour {
 		isDrawing = true;
 		dialogText.text = ""; //just to be safe, in case DialogManager does not do this in other methods
 		foreach (char character in currentDialog.Sentence) {
-			dialogText.text += character;
 			yield return new WaitForSeconds(drawSpeed);
+			dialogText.text += character;
 		}
 		isDrawing = false;
 	}
 
 	private void FinishConversation() {
-		Debug.Log ("Conversation finished");
+		dialogText.gameObject.SetActive(false); //avoids re-drawing costs when emptying the dialogText's text.
 		dialogText.text = "";
 		dialogBoxAnimator.SetBool("Open", false);
 		currentDialog = null;
-		SetDialogAvailable(true); //assumes player can't move while in a conversation
+		InteractionManager.Instance.UnregisterActiveInteraction();
 	}
 
 	public bool IsInConversation() {

@@ -16,15 +16,14 @@ public class DialogInputManager : MonoBehaviour {
 	/// </summary>
 	private Talker currentTalker;
 
-	/// <summary>
-	/// List of DialogAvailableListeners that are called 
-	/// </summary>
-	private IOnDialogAvailableListener listeners;
-
 	//TODO: it's for PC version, mobile version could simply listen for clicks in the interface.
 	void Update() {
-		if (!DialogManager.Instance.IsDrawing && ButtonToTalkPressed()) {
-			StartConversation();
+		if (ButtonToTalkPressed()) {
+			if(!DialogManager.Instance.IsDrawing) {
+				AdvanceConversation();
+			} else {
+				SkipDialogDrawing();
+			}
 		} 
 	}
 
@@ -35,7 +34,6 @@ public class DialogInputManager : MonoBehaviour {
 	public void Enable(Talker talker) {
 		currentTalker = talker;
 		enabled = true;
-		DialogManager.Instance.SetDialogAvailable(true);
 	}
 
 	/// <summary>
@@ -44,14 +42,17 @@ public class DialogInputManager : MonoBehaviour {
 	/// </summary>
 	public void Disable() {
 		enabled = false;
-		DialogManager.Instance.SetDialogAvailable(false);
 	}
 
 	private bool ButtonToTalkPressed() {
 		return Input.GetKeyDown(KeyCode.F);
 	}
 
-	private void StartConversation() {
-		DialogManager.Instance.StartDialog(currentTalker.Talk());
+	private void AdvanceConversation() {
+		DialogManager.Instance.AdvanceDialog(currentTalker.Talk());
+	}
+
+	private void SkipDialogDrawing() {
+		DialogManager.Instance.SkipCurrentDialog();
 	}
 }

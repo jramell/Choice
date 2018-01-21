@@ -56,10 +56,12 @@
      <Compile Include="Assets\Scripts\Dialog System\DialogInputManager.cs" />
      <Compile Include="Assets\Scripts\Dialog System\DialogManager.cs" />
      <Compile Include="Assets\Scripts\Dialog System\DialogTrigger.cs" />
-     <Compile Include="Assets\Scripts\Dialog System\IOnDialogAvailableListener.cs" />
      <Compile Include="Assets\Scripts\Dialog System\NPC.cs" />
      <Compile Include="Assets\Scripts\Dialog System\Talker.cs" />
      <Compile Include="Assets\Scripts\Dialog System\Talkers\Cain.cs" />
+     <Compile Include="Assets\Scripts\Enums\Interaction.cs" />
+     <Compile Include="Assets\Scripts\Interaction System\IInteractionTrigger.cs" />
+     <Compile Include="Assets\Scripts\Interaction System\InteractionManager.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

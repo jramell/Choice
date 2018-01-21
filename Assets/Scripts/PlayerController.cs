@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour {
 		UpdateInternalState();
 		ProcessInput();
 		rigidbody2D.velocity = targetVelocity;
-
 	}
 
 	/// <summary>
@@ -148,5 +147,27 @@ public class PlayerController : MonoBehaviour {
 
 	void Jump() {
 		targetVelocity.y = jumpVelocity;
+	}
+
+	/// <summary>
+	/// When executed, the PlayerController stops receiving input from the player. If it's already
+	/// disabled, does nothing.
+	/// </summary>
+	public void Enable() {
+		Debug.Log ("enabled");
+		enabled = true;
+	}
+
+	/// <summary>
+	/// When executed, the PlayerController stops receiving input from the player. If it's already
+	/// disabled, does nothing.
+	/// </summary>
+	public void Disable() {
+		enabled = false;
+		CancelMovement();
+	}
+
+	void CancelMovement() {
+		rigidbody2D.velocity = Vector2.zero;
 	}
 }
