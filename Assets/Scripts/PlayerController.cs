@@ -44,15 +44,83 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField]
 	[Tooltip("If groundCheck is at this distance or less from an object in a layer within WhatIsMask, the player will be considered grounded")]
 	private float groundCheckDistance = 0.15f;
+
+	[SerializeField]
+	[Tooltip("The player won't fall faster than this. Be warned this could interfere with the jump feeling.")]
+	private float maxFallSpeed = 45f;
+	#endregion
+
+	#region Wall Sliding Settins definition
+	[Header("Wall Sliding Settings")]
+
+	///<summary>
+	/// If any object in the slidable LayerMask is at slidingDistance or less to the right of any transform in this list, and the player is
+	/// moving left and not grounded, the player is considered to be Wall Sliding
+	/// </summary>
+	[SerializeField]
+	[Tooltip("If any object in the slidable LayerMask is at slidingDistance or less to the left of any transform in this list, and the player is"
+		+ " moving left and not grounded, the player is considered to be Wall Sliding")]
+	private Transform[] leftSlideChecks;
+
+	///<summary>
+	/// If any object in the slidable LayerMask is at slidingDistance or less to the right of any transform in this list, and the player is
+	/// moving right and not grounded, the player is considered to be Wall Sliding
+	/// </summary>
+	[SerializeField]
+	[Tooltip("If any object in the slidable LayerMask is at slidingDistance or less to the right of any transform in this list, and the player is"
+		+ " moving right and not grounded, the player is considered to be Wall Sliding")]
+	private Transform[] rightSlideChecks;
+
+	/// <summary>
+	/// Layers the player can wall slide on
+	/// </summary>
+	[Tooltip("Layers the player can wall slide on")]
+	public LayerMask slidable;
+
+	/// <summary>
+	/// Distance a slidable surface must be to a slideCheck in the direction the player is moving for the player to be considered Wall Sliding
+	/// </summary>
+	[Tooltip("Distance a slidable surface must be to a slideCheck in the direction the player is moving for the player to be considered Wall Sliding")]
+	public float slideCheckDistance = 0.1f;
+
+	[Tooltip("Speed that player falls when wall sliding. If it's negative, the player will slide upwards")]
+	public float maxSlidingSpeed = 5f;
+
+	/// <summary>
+	/// When the player is Wall Sliding and wants to jump towards the direction of the wall they're sliding on, this impulse is applied.
+	/// </summary>
+	public Vector2 wallJumpClimbImpulse;
+
+	/// <summary>
+	/// When the player is Wall Sliding and wants to jump off the wall they're sliding on, but not in the opposite direction, this impulse is applied.
+	/// </summary>
+	public Vector2 wallJumpOffImpulse;
+
+	/// <summary>
+	/// When the player is Wall Sliding and wants to jump to the opposite direction, this impulse is applied.
+	/// </summary>
+	public Vector2 wallJumpOppositeImpulse;
+
 	#endregion
 
 	#region Debug Settings definition
-	[SerializeField]
 	[Header("Debug Settings")]
+
+	[SerializeField]
 	private bool debugJump = true;
+
+	[SerializeField]
+	private bool debugWallSliding = true;
 	#endregion
 
 	#region Internal variables definition
+
+	/// <summary>
+	/// Direction the player wants to move towards in the X axis in this frame. 1 if it's to the right, -1 if to the left, 0 if none.
+	/// Note this isn't necessarily the direction the player is currently moving towards.
+	/// </summary>
+	private float inputX;
+
 	/// <summary>
 	/// Y-axis velocity of the player when they jump. Calculated in Start() according to maxJumpHeight and timeToApex.
 	/// </summary>
@@ -64,6 +132,13 @@ public class PlayerController : MonoBehaviour {
 	/// Y-axis velocity the player needs to reach 
 	/// </summary>
 	private float earlyJumpTerminationVelocity = 0f;
+
+	private bool isWallSliding = false;
+
+	/// <summary>
+	/// 0 when not wall sliding, 1 when wall sliding to the right, -1 when wall sliding to the left
+	/// </summary>
+	private int wallSlidingDirection = 0;
 
 	/// <summary>
 	/// Target velocity of the current frame. Is modified according to the actions the player wants to take.
@@ -85,28 +160,77 @@ public class PlayerController : MonoBehaviour {
 		jumpVelocity = Mathf.Sqrt(2 * rigidbody2D.gravityScale * maxJumpHeight);
 		earlyJumpTerminationVelocity = Mathf.Sqrt (
 			Mathf.Pow(jumpVelocity, 2) + -2 * rigidbody2D.gravityScale * (maxJumpHeight - minJumpHeight) );
+		maxFallSpeed *= -1;
+		maxSlidingSpeed *= -1;
 	}
 
-	void Update() {
-		UpdateInternalState();
-		ProcessInput();
+	void Update() { //the order the state of things is updated and differents part of the input processed is important
+		targetVelocity = rigidbody2D.velocity; //should handle X axis acceleration!!
+		UpdateIsGrounded();
+		ProcessHorizontalMovementInput();
+		ProcessJumpInput();
+		//------ things processed until now are jump and horizontal movement, both of which affect Wall Sliding. If
+		//the player is grounded, he can't wall slide, and if he isn't trying to move horizontally, he won't wall slide regardless
+		//of grounded state, hence why Wall Sliding is processed after these.
+		UpdateWallSlidingState();
+		ProcessWallSlidingInput();
+		LimitFallSpeed();
 		rigidbody2D.velocity = targetVelocity;
 	}
 
-	/// <summary>
-	/// Resets targetVelocity this frame and checks if the player is grounded. 
-	/// </summary>
-	private void UpdateInternalState() {
-		targetVelocity = rigidbody2D.velocity;
-		UpdateIsGrounded();
+	private void LimitFallSpeed() {
+		targetVelocity.y = Mathf.Max(targetVelocity.y, maxFallSpeed);
 	}
 
-	/// <summary>
-	/// Resets targetVelocity this frame and checks if the player is grounded. 
-	/// </summary>
-	private void ProcessInput() {
+	private void ProcessHorizontalMovementInput() {
+		inputX = Input.GetAxisRaw("Horizontal");
 		targetVelocity.x = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-		ProcessJumpInput();
+	}
+
+	private void UpdateWallSlidingState() {
+		if (isGrounded) {
+			isWallSliding = false;
+			return;
+		}
+		bool movingRight = targetVelocity.x > 0f;
+		Transform[] slideChecks = movingRight ? rightSlideChecks : leftSlideChecks;
+		Vector2 directionVector = movingRight ? Vector2.right : Vector2.left;
+		isWallSliding = false;
+		for(int i = 0; i < slideChecks.Length && !isWallSliding; i++) {
+			isWallSliding = Physics2D.Raycast(slideChecks[i].position, directionVector, slideCheckDistance, slidable);
+			if (debugWallSliding) {
+				Debug.DrawRay(slideChecks[i].position, directionVector * slideCheckDistance, Color.yellow);
+			}
+		}
+		if(isWallSliding) {
+			wallSlidingDirection = movingRight ? 1 : -1;
+		} else {
+			wallSlidingDirection = 0;
+		}
+	}
+
+	private void ProcessWallSlidingInput() {
+		if(!isWallSliding) {
+			return;
+		}
+		if(targetVelocity.y < maxSlidingSpeed) {
+			targetVelocity.y = maxSlidingSpeed;
+		}
+		if(PlayerWantsToJump()) {
+			bool playerWantsToClimbWall = inputX == wallSlidingDirection;
+			bool playerWantsToJumpOffWall = inputX == 0;
+			if (playerWantsToClimbWall) {
+				targetVelocity.x = -wallSlidingDirection * wallJumpClimbImpulse.x;
+				targetVelocity.y = wallJumpClimbImpulse.y;
+			} else if (playerWantsToJumpOffWall) {
+				targetVelocity.x = -wallSlidingDirection * wallJumpOffImpulse.x;
+				targetVelocity.y = wallJumpOffImpulse.y;
+			} else { //player wants to leap towards opposite wall
+				targetVelocity.x = -wallSlidingDirection * wallJumpOppositeImpulse.x;
+				targetVelocity.y = wallJumpOppositeImpulse.y;
+			}
+			targetVelocity.x *= Time.deltaTime;
+		}
 	}
 
 	/// <summary>
@@ -154,7 +278,6 @@ public class PlayerController : MonoBehaviour {
 	/// disabled, does nothing.
 	/// </summary>
 	public void Enable() {
-		Debug.Log ("enabled");
 		enabled = true;
 	}
 

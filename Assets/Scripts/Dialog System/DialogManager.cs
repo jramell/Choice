@@ -25,7 +25,6 @@ public class DialogManager : MonoBehaviour {
 
 	private static DialogManager instance;
 	private Dialog currentDialog;
-	private bool isDrawing = false;
 	private Coroutine drawingCoroutine;
 
 	void Awake() {
@@ -42,7 +41,7 @@ public class DialogManager : MonoBehaviour {
 	}
 
 	public bool IsDrawing {
-		get { return isDrawing; }
+		get { return drawingCoroutine != null; }
 	}
 
 	/// <summary>
@@ -82,7 +81,6 @@ public class DialogManager : MonoBehaviour {
 	private void AbortDrawingCharacters() {
 		StopCoroutine(drawingCoroutine);
 		drawingCoroutine = null;
-		isDrawing = false; 
 	}
 
 	/// <summary>
@@ -90,13 +88,12 @@ public class DialogManager : MonoBehaviour {
 	/// </summary>
 	/// <returns>The dialog characters.</returns>
 	private IEnumerator DrawDialogCharacters() {
-		isDrawing = true;
 		dialogText.text = ""; //just to be safe, in case DialogManager does not do this in other methods
 		foreach (char character in currentDialog.Sentence) {
 			yield return new WaitForSeconds(drawSpeed);
 			dialogText.text += character;
 		}
-		isDrawing = false;
+		drawingCoroutine = null;
 	}
 
 	private void FinishConversation() {
