@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour {
 	#region Walk Settings definition
 	[Header("Walk settings")]
 	public float speed = 10f;
+
+	public float accelerationTimeGrounded = 0.1f;
+
+	public float accelerationTimeAirborne = 0.2f;
 	#endregion
 
 	#region Jump Settings definition
@@ -121,6 +125,8 @@ public class PlayerController : MonoBehaviour {
 	/// </summary>
 	private float inputX;
 
+	private float velocityXSmoothing;
+
 	/// <summary>
 	/// Y-axis velocity of the player when they jump. Calculated in Start() according to maxJumpHeight and timeToApex.
 	/// </summary>
@@ -175,6 +181,7 @@ public class PlayerController : MonoBehaviour {
 		UpdateWallSlidingState();
 		ProcessWallSlidingInput();
 		LimitFallSpeed();
+		//targetVelocity.x *= Time.deltaTime;
 		rigidbody2D.velocity = targetVelocity;
 	}
 
@@ -184,7 +191,9 @@ public class PlayerController : MonoBehaviour {
 
 	private void ProcessHorizontalMovementInput() {
 		inputX = Input.GetAxisRaw("Horizontal");
-		targetVelocity.x = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+		float accelerationTime = isGrounded ? accelerationTimeGrounded : accelerationTimeAirborne;
+		//Mathf.SmoothDamp handles acceleration, basically
+		targetVelocity.x = Mathf.SmoothDamp (rigidbody2D.velocity.x, inputX * speed * Time.deltaTime, ref velocityXSmoothing, accelerationTime);
 	}
 
 	private void UpdateWallSlidingState() {
@@ -229,7 +238,6 @@ public class PlayerController : MonoBehaviour {
 				targetVelocity.x = -wallSlidingDirection * wallJumpOppositeImpulse.x;
 				targetVelocity.y = wallJumpOppositeImpulse.y;
 			}
-			targetVelocity.x *= Time.deltaTime;
 		}
 	}
 
