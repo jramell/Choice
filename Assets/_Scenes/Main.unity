@@ -2416,7 +2416,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.75, y: 2}
+  m_Size: {x: 1.7, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &1002424676
 MonoBehaviour:
@@ -2450,11 +2450,12 @@ MonoBehaviour:
   slidable:
     serializedVersion: 2
     m_Bits: 256
-  slideCheckDistance: 0.05
+  slideCheckDistance: 0.04
   maxSlidingSpeed: 5
-  wallJumpClimbImpulse: {x: 13, y: 32}
+  wallStickTime: 0.25
+  wallJumpClimbImpulse: {x: 15, y: 32}
   wallJumpOffImpulse: {x: 8.5, y: 8}
-  wallJumpOppositeImpulse: {x: 18, y: 17}
+  wallJumpOppositeImpulse: {x: 26, y: 30}
   debugJump: 1
   debugWallSliding: 1
 --- !u!114 &1002424677

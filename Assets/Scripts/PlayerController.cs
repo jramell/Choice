@@ -90,6 +90,9 @@ public class PlayerController : MonoBehaviour {
 	[Tooltip("Speed that player falls when wall sliding. If it's negative, the player will slide upwards")]
 	public float maxSlidingSpeed = 5f;
 
+	[Tooltip("Time the player needs to want to move away from a wall to actually move away from a wall. Does not have to do with jumping away from a wall")]
+	public float wallStickTime = 0.25f;
+
 	/// <summary>
 	/// When the player is Wall Sliding and wants to jump towards the direction of the wall they're sliding on, this impulse is applied.
 	/// </summary>
@@ -147,6 +150,11 @@ public class PlayerController : MonoBehaviour {
 	private int wallSlidingDirection = 0;
 
 	/// <summary>
+	/// Time the player needs to want to move away from a wall to actually move away from a wall. Doesn't have to do with jumping away from a wall.
+	/// </summary>
+	private float timeToWallUnstick;
+
+	/// <summary>
 	/// Target velocity of the current frame. Is modified according to the actions the player wants to take.
 	/// </summary>
 	private Vector2 targetVelocity;
@@ -168,6 +176,7 @@ public class PlayerController : MonoBehaviour {
 			Mathf.Pow(jumpVelocity, 2) + -2 * rigidbody2D.gravityScale * (maxJumpHeight - minJumpHeight) );
 		maxFallSpeed *= -1;
 		maxSlidingSpeed *= -1;
+		timeToWallUnstick = wallStickTime;
 	}
 
 	void Update() { //the order the state of things is updated and differents part of the input processed is important
@@ -181,7 +190,6 @@ public class PlayerController : MonoBehaviour {
 		UpdateWallSlidingState();
 		ProcessWallSlidingInput();
 		LimitFallSpeed();
-		//targetVelocity.x *= Time.deltaTime;
 		rigidbody2D.velocity = targetVelocity;
 	}
 
@@ -201,9 +209,21 @@ public class PlayerController : MonoBehaviour {
 			isWallSliding = false;
 			return;
 		}
-		bool movingRight = targetVelocity.x > 0f;
-		Transform[] slideChecks = movingRight ? rightSlideChecks : leftSlideChecks;
-		Vector2 directionVector = movingRight ? Vector2.right : Vector2.left;
+		bool currentDirection = wallSlidingDirection == 1;
+		CheckIfWallSlidingToDirection(currentDirection); //check current wall sliding direction first
+		if (!isWallSliding) {
+			CheckIfWallSlidingToDirection(!currentDirection);
+		}
+	}
+
+	/// <summary>
+	/// Checks if wall sliding to the direction passed as a parameter. True means right direction. False means left direction.
+	/// </summary>
+	/// <param name="rightDirection">If set to <c>true</c> right direction.</param>
+	private void CheckIfWallSlidingToDirection(bool rightDirection) {
+		Transform[] slideChecks = rightDirection ? rightSlideChecks : leftSlideChecks;
+		Vector2 directionVector = rightDirection ? Vector2.right : Vector2.left;
+		bool wasWallSliding = isWallSliding;
 		isWallSliding = false;
 		for(int i = 0; i < slideChecks.Length && !isWallSliding; i++) {
 			isWallSliding = Physics2D.Raycast(slideChecks[i].position, directionVector, slideCheckDistance, slidable);
@@ -212,7 +232,10 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 		if(isWallSliding) {
-			wallSlidingDirection = movingRight ? 1 : -1;
+			wallSlidingDirection = rightDirection ? 1 : -1;
+			if(!wasWallSliding) {
+				ResetTimeToWallUnstick();
+			}
 		} else {
 			wallSlidingDirection = 0;
 		}
@@ -222,12 +245,17 @@ public class PlayerController : MonoBehaviour {
 		if(!isWallSliding) {
 			return;
 		}
-		if(targetVelocity.y < maxSlidingSpeed) {
+		if(targetVelocity.y < maxSlidingSpeed) { //limit wall sliding speed
 			targetVelocity.y = maxSlidingSpeed;
+		}
+		if (timeToWallUnstick > 0) {
+			HandleWallSlideUnstick();
 		}
 		if(PlayerWantsToJump()) {
 			bool playerWantsToClimbWall = inputX == wallSlidingDirection;
 			bool playerWantsToJumpOffWall = inputX == 0;
+			timeToWallUnstick = -1; //so time to wall unstick doesn't mess with X impulse on jump
+
 			if (playerWantsToClimbWall) {
 				targetVelocity.x = -wallSlidingDirection * wallJumpClimbImpulse.x;
 				targetVelocity.y = wallJumpClimbImpulse.y;
@@ -239,6 +267,22 @@ public class PlayerController : MonoBehaviour {
 				targetVelocity.y = wallJumpOppositeImpulse.y;
 			}
 		}
+	}
+
+	private void HandleWallSlideUnstick() {
+		velocityXSmoothing = 0;
+		targetVelocity.x = 0;
+		bool playerWantsToMoveAwayFromWall = inputX != wallSlidingDirection && inputX != 0;
+		if (playerWantsToMoveAwayFromWall) {
+			timeToWallUnstick -= Time.deltaTime;
+			Debug.Log ("reducing time to wall unstick");
+		} else {
+			ResetTimeToWallUnstick();
+		}
+	}
+
+	private void ResetTimeToWallUnstick() {
+		timeToWallUnstick = wallStickTime;
 	}
 
 	/// <summary>
