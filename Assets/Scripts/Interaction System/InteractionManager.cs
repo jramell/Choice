@@ -75,12 +75,14 @@ public class InteractionManager : MonoBehaviour {
 		activeInteractionType = interactionType;
 		HideActionAvailablePrompt();
 		playerController.Disable();
+		SystemManager.Instance.RegisterActiveSystem(GameSystem.Type.Interaction);
 	}
 
 	public void UnregisterActiveInteraction() {
 		ShowActionAvailablePrompt();
 		activeInteractionType = Interaction.Type.None;
 		playerController.Enable();
+		SystemManager.Instance.UnregisterActiveSystem(GameSystem.Type.Interaction);
 	}
 
 	private void HideActionAvailablePrompt() {
@@ -91,5 +93,24 @@ public class InteractionManager : MonoBehaviour {
 	private void ShowActionAvailablePrompt() {
 		actionAvailablePrompt.text = "[F] " + currentTrigger.InteractionType();
 		actionAvailablePrompt.gameObject.SetActive(true);
+	}
+
+	/// <summary>
+	/// If an interaction trigger is listening for input, this suspends such listening. Calling RestablishInteraction
+	/// would start listening for input again.
+	/// </summary>
+	public void SuspendInteraction() {
+		if(currentTrigger != null) {
+			currentTrigger.DisableInteraction();
+		}
+	}
+
+	/// <summary>
+	/// If the interaction that was listening for input was suspended, this will restart listening for input.
+	/// </summary>
+	public void RestablishInteraction() {
+		if(currentTrigger != null) {
+			currentTrigger.EnableInteraction();
+		}
 	}
 }

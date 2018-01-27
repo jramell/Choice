@@ -15,12 +15,12 @@ public class DialogTrigger : MonoBehaviour, IInteractionTrigger {
 	/// <summary>
 	/// The player's dialog input manager, cached on the first OnTriggerEnter2D event for performance.
 	/// </summary>
-	private DialogInputManager dialogInputManager;
+	private DialogController dialogInputManager;
 
 	void OnTriggerEnter2D(Collider2D collider2d) {
 		if(collider2d.tag == "Player") {
 			if (dialogInputManager == null) {
-				dialogInputManager = collider2d.gameObject.GetComponent<DialogInputManager>();
+				dialogInputManager = collider2d.gameObject.GetComponent<DialogController>();
 			}
 			InteractionManager.Instance.RegisterTrigger(this, Interaction.Type.Talk);
 		}

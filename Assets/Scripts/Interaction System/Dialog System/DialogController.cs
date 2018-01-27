@@ -9,7 +9,7 @@ using UnityEngine;
 /// If working on a mobile version, it should be enough to make it a listener of the UI element that would 
 /// </summary>
 [RequireComponent(typeof(Collider2D))]	
-public class DialogInputManager : MonoBehaviour {
+public class DialogController : MonoBehaviour {
 
 	/// <summary>
 	/// The talking entity that the player wants to interact with when the DialogInputManager is active.
