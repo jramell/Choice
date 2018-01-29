@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Central entity that checks whether a system can activate in a certain circumstance. If it can't, it will disable it until it can again.
+/// Handles transition between systems. Checks if a system can activate in a certain circumstance. If it can't, it will disable it until it can again.
 /// For example, when the player is talking, the System Manager disables the PauseController until the conversation is over. Does not handle
 /// interactions within a system, only amongst systems. If the player pauses while about to interact, tells the active interaction controller
 /// to stop listening for input. Once the player unpauses, tells InteractionManager to keep going.
+/// 
+/// Handles which transitions should pause or unpause the game, so not every controller has to.
 /// </summary>
 public class SystemManager : MonoBehaviour {
 
@@ -30,9 +32,9 @@ public class SystemManager : MonoBehaviour {
 		if (systemType == GameSystem.Type.PauseMenu) {
 			TransitionToPauseMenu();
 		} else if (systemType == GameSystem.Type.Interaction) {
-			TransitionToPauseMenu();
-		} else if (systemType == GameSystem.Type.DictionaryMenu) {
-			TransitionToDictionaryMenu();
+			TransitionToInteraction ();
+		} else if (systemType == GameSystem.Type.PlayerMenu) {
+			TransitionToPlayerMenu();
 		}
 	}
 
@@ -40,9 +42,9 @@ public class SystemManager : MonoBehaviour {
 		if (systemType == GameSystem.Type.PauseMenu) {
 			TransitionFromPauseMenu();
 		} else if (systemType == GameSystem.Type.Interaction) {
-			TransitionFromPauseMenu();
-		} else if (systemType == GameSystem.Type.DictionaryMenu) {
-			TransitionFromDictionaryMenu();
+			TransitionFromInteraction();
+		} else if (systemType == GameSystem.Type.PlayerMenu) {
+			TransitionFromPlayerMenu();
 		}
 	}
 
@@ -54,13 +56,15 @@ public class SystemManager : MonoBehaviour {
 	/// </summary>
 	private void TransitionToPauseMenu() {
 		SuspendInteraction();
-		DisableDictionaryMenu();
+		DisablePlayerMenu();
+		PauseGame();
 		//can't do anything else while game is paused
 	}
 
 	private void TransitionFromPauseMenu() {
 		AwakeInteraction();
-		EnableDictionaryMenu();
+		EnablePlayerMenu();
+		UnpauseGame();
 	}
 
 	/// <summary>
@@ -68,7 +72,7 @@ public class SystemManager : MonoBehaviour {
 	/// </summary>
 	private void TransitionToInteraction() {
 		DisablePauseMenu();
-		DisableDictionaryMenu();
+		DisablePlayerMenu();
 	}
 
 	/// <summary>
@@ -76,18 +80,21 @@ public class SystemManager : MonoBehaviour {
 	/// </summary>
 	private void TransitionFromInteraction() {
 		EnablePauseMenu();
-		EnableDictionaryMenu();
+		EnablePlayerMenu();
 	}
 
-	private void TransitionToDictionaryMenu() {
+	private void TransitionToPlayerMenu() {
 		SuspendInteraction();
 		DisablePauseMenu();
+		PauseGame();
 	}
 
-	private void TransitionFromDictionaryMenu() {
+	private void TransitionFromPlayerMenu() {
 		AwakeInteraction();
 		EnablePauseMenu();
+		UnpauseGame();
 	}
+
 	#endregion
 
 	#region Helper methods definition
@@ -103,12 +110,13 @@ public class SystemManager : MonoBehaviour {
 		pauseMenuController.Enable();
 	}
 
-	private void DisableDictionaryMenu() {
-		//once entity exists
+	private void EnablePlayerMenu() {
+		//DictionaryWindowManager.Instance.DisableDictionaryWindowController();
+		MenuNavigationManager.Instance.DisablePlayerMenuController();
 	}
 
-	private void EnableDictionaryMenu() {
-		//once entity exists
+	private void DisablePlayerMenu() {
+		MenuNavigationManager.Instance.EnablePlayerMenuController();
 	}
 
 	private void SuspendInteraction() {
@@ -117,6 +125,15 @@ public class SystemManager : MonoBehaviour {
 
 	private void AwakeInteraction() {
 		InteractionManager.Instance.RestablishInteraction();
+	}
+
+	private void PauseGame() {
+		
+		PauseManager.Instance.Pause();
+	}
+
+	private void UnpauseGame() {
+		PauseManager.Instance.Unpause();
 	}
 
 	#endregion

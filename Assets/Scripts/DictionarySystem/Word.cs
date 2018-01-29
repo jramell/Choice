@@ -23,8 +23,8 @@ public class Word : MonoBehaviour {
 	[Tooltip("Buff to be applied to the player when this word is used. If word doesn't have EffectType Buff, nothing is done with this")]
 	public Buff buff;
 
-	[Tooltip("Equipment to be equipped to the player when this word is used. If word doesn't have EffectType Equiṕ, nothing is done with this")]
-	public Equipment equipment;
+	[Tooltip("Equippable to be equipped to the player when this word is used. If word doesn't have EffectType Equiṕ, nothing is done with this")]
+	public Equippable equippable;
 
 	public Sprite Icon {
 		get { return icon; }
@@ -43,11 +43,12 @@ public class Word : MonoBehaviour {
 		get { return type; }
 	}
 
-	public void Use() {
+	public void Craft() {
 		if(type == Word.EffectType.Buff) {
 			//tell player controller's BuffManager to apply buff
 		} else if(type == Word.EffectType.Equip) {
 			//tell the player controller's EquipmentManager to equip equipment
+			equippable.OnCrafted();
 		}
 	}
 }

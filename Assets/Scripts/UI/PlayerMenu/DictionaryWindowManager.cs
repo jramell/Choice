@@ -44,6 +44,8 @@ public class DictionaryWindowManager : MonoBehaviour {
 
 	private WordSlot currentlySelectedWordSlot;
 
+	private DictionaryWindowController dictionaryWindowController;
+
 	void Awake() {
 		if(instance == null) {
 			instance = this;
@@ -102,6 +104,20 @@ public class DictionaryWindowManager : MonoBehaviour {
 
 	public int WordSlotCols {
 		get { return wordSlots.GetLength(1); }
+	}
+
+	public void EnableDictionaryWindowController() {
+		if(dictionaryWindowController == null) {
+			dictionaryWindowController = GameObject.FindGameObjectWithTag("Player").GetComponent<DictionaryWindowController>();
+		}
+		dictionaryWindowController.Enable();
+	}
+
+	public void DisableDictionaryWindowController() {
+		if(dictionaryWindowController == null) {
+			dictionaryWindowController = GameObject.FindGameObjectWithTag("Player").GetComponent<DictionaryWindowController>();
+		}
+		dictionaryWindowController.Disable();
 	}
 }
 

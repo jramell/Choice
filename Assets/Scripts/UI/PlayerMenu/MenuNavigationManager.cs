@@ -4,13 +4,16 @@ using UnityEngine;
 
 /// <summary>
 /// Handles navigating in around the player's menu that contains the Dictionary. Activates and deactivates the controller of the
-/// current window appropriately.
+/// current window appropriately. Does not listen for input, as that is done by controllers and UI elements. Does not handle 
+/// triggering animations for changing windows, as that is handled by controllers and UI elements.
 /// </summary>
 public class MenuNavigationManager : MonoBehaviour {
 
 	private static MenuNavigationManager instance;
-	private MenuController menuController;
+	private MenuController playerMenuController;
 	private DictionaryWindowController dictionaryController;
+
+	private IController currentWindowController;
 
 	void Awake() {
 		if(instance == null) {
@@ -25,22 +28,37 @@ public class MenuNavigationManager : MonoBehaviour {
 		get { return instance; }
 	}
 
+	public void OpenPlayerMenu() {
+		FocusDictionary();
+		SystemManager.Instance.RegisterActiveSystem(GameSystem.Type.PlayerMenu);
+	}
+
 	/// <summary>
 	/// Called when the Dictionary Menu becomes the focus of the game.
 	/// </summary>
 	public void FocusDictionary() {
-		if(menuController == null) {
-			menuController = GameObject.FindGameObjectWithTag("Player").GetComponent<MenuController>();
+		if(playerMenuController == null) {
+			playerMenuController = GameObject.FindGameObjectWithTag("Player").GetComponent<MenuController>();
 		}
 		if(dictionaryController == null) {
 			dictionaryController = GameObject.FindGameObjectWithTag("Player").GetComponent<DictionaryWindowController>();
 		}
-		menuController.Disable();
+		playerMenuController.Disable();
 		dictionaryController.Enable();
+		currentWindowController = dictionaryController;
 	}
 
 	public void ExitPlayerMenu() {
-		menuController.Enable();
-		dictionaryController.Disable();
+		currentWindowController.Disable();
+		playerMenuController.Enable();
+		SystemManager.Instance.UnregisterActiveSystem(GameSystem.Type.PlayerMenu);
+	}
+
+	public void DisablePlayerMenuController() {
+		playerMenuController.Disable();
+	}
+
+	public void EnablePlayerMenuController() {
+		playerMenuController.Enable();
 	}
 }

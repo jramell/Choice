@@ -180,6 +180,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update() { //the order the state of things is updated and differents part of the input processed is important
+		Debug.Log("PlayerController.Update() enabled");
 		targetVelocity = rigidbody2D.velocity; //should handle X axis acceleration!!
 		UpdateIsGrounded();
 		ProcessHorizontalMovementInput();

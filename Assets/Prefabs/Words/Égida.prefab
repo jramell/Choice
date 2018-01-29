@@ -51,9 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc04d49b3e59c44e916300c68f99e85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 0}
   word: "\xC9gida"
   definition: "1. <i>f.</i> escudo (\u2016 arma defensiva).\r\n\r\n2. <i>f.</i> Protecci\xF3n,
     defensa."
   type: 1
   buff: {fileID: 0}
-  equipment: {fileID: 0}
+  equippable: {fileID: 114019555002552036, guid: 3b3472d78ff7aaf4e9bb61dc28f84be2,
+    type: 2}

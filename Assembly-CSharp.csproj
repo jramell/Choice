@@ -51,14 +51,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Crafting System\CraftingController.cs" />
+     <Compile Include="Assets\Scripts\Crafting System\CraftingManager.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Buff.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\DictionaryManager.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Equipment.cs" />
+     <Compile Include="Assets\Scripts\DictionarySystem\Equippables\Key.cs" />
+     <Compile Include="Assets\Scripts\DictionarySystem\Equippables\Shield.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Wearable.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Word.cs" />
      <Compile Include="Assets\Scripts\Enums\Duration.cs" />
      <Compile Include="Assets\Scripts\Enums\GameSystem.cs" />
      <Compile Include="Assets\Scripts\Enums\Interaction.cs" />
+     <Compile Include="Assets\Scripts\IController.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Conversation.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Dialog.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\DialogController.cs" />
