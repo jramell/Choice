@@ -12,28 +12,41 @@ public class GridLayoutResizer : MonoBehaviour {
 
 
 	[Header("Spacing Settings")]
+	/// <summary>
+	/// Whether the script should automatically calculate GridLayout spacing or not
+	/// </summary>
 	[Tooltip("Whether the script should automatically calculate GridLayout spacing or not")]
 	public bool calculateSpacing = true;
 
+	/// <summary>
+	/// Percent of the container's width that will be used for horizontal spacing
+	/// </summary>
 	[Tooltip("Percent of the container's width that will be used for horizontal spacing")]
 	public float widthSpacingPercent = 0.1f;
 
+	/// <summary>
+	/// Percent of the container's height that will be used for vertical spacing
+	/// </summary>
 	[Tooltip("Percent of the container's height that will be used for vertical spacing")]
 	public float heightSpacingPercent = 0.1f;
+
+	public GameObject[,] gridCells;
 
 	void Start() {
 		RectTransform parentRect = gameObject.GetComponent<RectTransform>();
 		GridLayoutGroup gridLayout = gameObject.GetComponent<GridLayoutGroup>();
+		gridCells = new GameObject[numberOfRows, numberOfCols];
 		if(calculateSpacing) {
 			CalculateSpacing(parentRect, gridLayout);
 		}
 		CalculateCellSize(parentRect, gridLayout);
+		DictionaryWindowManager.Instance.InitializeWordSlots(gridCells);
 	}
 
 	private void CalculateSpacing(RectTransform parentRect, GridLayoutGroup gridLayout) {
 		float spacingX = parentRect.rect.width * widthSpacingPercent / numberOfCols;
 		float spacingY = parentRect.rect.height * heightSpacingPercent / numberOfRows;
-		gridLayout.spacing = new Vector2 (spacingX, spacingY);
+		gridLayout.spacing = new Vector2(spacingX, spacingY);
 	}
 
 	private void CalculateCellSize(RectTransform parentRect, GridLayoutGroup gridLayout) {
@@ -44,6 +57,7 @@ public class GridLayoutResizer : MonoBehaviour {
 			for (int j = 0; j < numberOfCols; j++) {
 				GameObject wordSlot = Instantiate(cellPrefab);
 				wordSlot.transform.SetParent(gameObject.transform, false);
+				gridCells[i,j] = wordSlot;
 			}
 		}
 	}

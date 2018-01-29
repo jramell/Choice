@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224880200577297514}
   - component: {fileID: 222373214151146276}
   - component: {fileID: 114170755911980614}
-  - component: {fileID: 114620536191714826}
+  - component: {fileID: 114530657096743154}
   m_Layer: 5
   m_Name: Word
   m_TagString: Untagged
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114620536191714826
+--- !u!114 &114530657096743154
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -81,39 +81,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1171765885856724}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 061db6ba7b786c248aa959963e2be35f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.89705884, g: 0.83501077, b: 0.48810557, a: 1}
-    m_PressedColor: {r: 0.8980393, g: 0.8352942, b: 0.48627454, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.01
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 114170755911980614}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  word: {fileID: 0}
+  wordText: {fileID: 114674100503216334}
+  transitionType: 0
+  selectedColor: {r: 0.5464965, g: 0.9065296, b: 0.97794116, a: 1}
+  selectedSprite: {fileID: 0}
 --- !u!114 &114674100503216334
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -135,18 +110,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 12
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 12
-    m_MaxSize: 32
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Llave
+  m_Text: 
 --- !u!222 &222373214151146276
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -173,10 +148,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 55.635, y: -20}
+  m_SizeDelta: {x: 111.27, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224891204438696970
 RectTransform:
@@ -193,6 +168,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.27400002}
   m_AnchorMin: {x: 0.095000006, y: 0.2}
   m_AnchorMax: {x: 0.896, y: 0.8}
-  m_AnchoredPosition: {x: -0.0023105, y: -0.010475}
+  m_AnchoredPosition: {x: -0.0023105145, y: -0.010475}
   m_SizeDelta: {x: -0.097351, y: -0.48594}
   m_Pivot: {x: 0.5, y: 0.5}

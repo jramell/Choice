@@ -51,6 +51,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\DictionarySystem\Buff.cs" />
+     <Compile Include="Assets\Scripts\DictionarySystem\DictionaryManager.cs" />
+     <Compile Include="Assets\Scripts\DictionarySystem\Equipment.cs" />
+     <Compile Include="Assets\Scripts\DictionarySystem\Wearable.cs" />
+     <Compile Include="Assets\Scripts\DictionarySystem\Word.cs" />
+     <Compile Include="Assets\Scripts\Enums\Duration.cs" />
      <Compile Include="Assets\Scripts\Enums\GameSystem.cs" />
      <Compile Include="Assets\Scripts\Enums\Interaction.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Conversation.cs" />
@@ -63,14 +69,17 @@
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Talkers\Cain.cs" />
      <Compile Include="Assets\Scripts\Interaction System\IInteractionTrigger.cs" />
      <Compile Include="Assets\Scripts\Interaction System\InteractionManager.cs" />
+     <Compile Include="Assets\Scripts\Magueo.cs" />
      <Compile Include="Assets\Scripts\Pause System\PauseManager.cs" />
      <Compile Include="Assets\Scripts\Pause System\PauseMenuController.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\Scripts\SystemManager.cs" />
      <Compile Include="Assets\Scripts\UI\GridLayoutResizer.cs" />
      <Compile Include="Assets\Scripts\UI\MenuController.cs" />
-     <Compile Include="Assets\Scripts\UI\PlayerMenu_UI\DictionaryUIController.cs" />
-     <Compile Include="Assets\Scripts\UI\PlayerMenu_UI\MenuNavigationManager.cs" />
+     <Compile Include="Assets\Scripts\UI\PlayerMenu\DictionaryWindowController.cs" />
+     <Compile Include="Assets\Scripts\UI\PlayerMenu\DictionaryWindowManager.cs" />
+     <Compile Include="Assets\Scripts\UI\PlayerMenu\MenuNavigationManager.cs" />
+     <Compile Include="Assets\Scripts\UI\PlayerMenu\WordSlot.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

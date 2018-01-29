@@ -10,6 +10,7 @@ public class MenuNavigationManager : MonoBehaviour {
 
 	private static MenuNavigationManager instance;
 	private MenuController menuController;
+	private DictionaryWindowController dictionaryController;
 
 	void Awake() {
 		if(instance == null) {
@@ -31,10 +32,15 @@ public class MenuNavigationManager : MonoBehaviour {
 		if(menuController == null) {
 			menuController = GameObject.FindGameObjectWithTag("Player").GetComponent<MenuController>();
 		}
+		if(dictionaryController == null) {
+			dictionaryController = GameObject.FindGameObjectWithTag("Player").GetComponent<DictionaryWindowController>();
+		}
 		menuController.Disable();
+		dictionaryController.Enable();
 	}
 
-	public void UnfocusDictionary() {
+	public void ExitPlayerMenu() {
 		menuController.Enable();
+		dictionaryController.Disable();
 	}
 }
