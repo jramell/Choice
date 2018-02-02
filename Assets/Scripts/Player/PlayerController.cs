@@ -180,7 +180,6 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update() { //the order the state of things is updated and differents part of the input processed is important
-		Debug.Log("PlayerController.Update() enabled");
 		targetVelocity = rigidbody2D.velocity; //should handle X axis acceleration!!
 		UpdateIsGrounded();
 		ProcessHorizontalMovementInput();
@@ -276,7 +275,6 @@ public class PlayerController : MonoBehaviour {
 		bool playerWantsToMoveAwayFromWall = inputX != wallSlidingDirection && inputX != 0;
 		if (playerWantsToMoveAwayFromWall) {
 			timeToWallUnstick -= Time.deltaTime;
-			Debug.Log ("reducing time to wall unstick");
 		} else {
 			ResetTimeToWallUnstick();
 		}

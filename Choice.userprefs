@@ -1,13 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Pause System\PauseController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UI\PlayerMenu\MenuNavigationManager.cs">
     <Files>
-      <File FileName="Assets\Scripts\SystemManager.cs" Line="13" Column="40" />
-      <File FileName="Assets\Scripts\Enums\GameSystem.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Interaction System\Dialog System\DialogController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Interaction System\Dialog System\DialogTrigger.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Pause System\PauseController.cs" Line="8" Column="3" />
-      <File FileName="Assets\Scripts\Pause System\PauseManager.cs" Line="10" Column="39" />
+      <File FileName="Assets\Scripts\SystemManager.cs" Line="67" Column="15" />
+      <File FileName="Assets\Scripts\UI\PlayerMenu\MenuNavigationManager.cs" Line="53" Column="30" />
+      <File FileName="Assets\Scripts\Crafting System\Equippables\Key.cs" Line="16" Column="3" />
+      <File FileName="Assets\Scripts\Combat System\EquipmentManager.cs" Line="36" Column="30" />
+      <File FileName="Assets\Scripts\Combat System\ActionController.cs" Line="10" Column="13" />
+      <File FileName="Assets\Scripts\DictionarySystem\Equipment.cs" Line="3" Column="39" />
+      <File FileName="Assets\Scripts\Crafting System\Equippables\Shield.cs" Line="11" Column="8" />
+      <File FileName="Assets\Scripts\DictionarySystem\Wearable.cs" Line="20" Column="23" />
+      <File FileName="Assets\Scripts\Interaction System\Dialog System\DialogManager.cs" Line="92" Column="55" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

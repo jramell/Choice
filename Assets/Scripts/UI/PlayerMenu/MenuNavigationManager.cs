@@ -50,15 +50,23 @@ public class MenuNavigationManager : MonoBehaviour {
 
 	public void ExitPlayerMenu() {
 		currentWindowController.Disable();
-		playerMenuController.Enable();
+		DisablePlayerMenuController();
 		SystemManager.Instance.UnregisterActiveSystem(GameSystem.Type.PlayerMenu);
 	}
 
 	public void DisablePlayerMenuController() {
+		InitializePlayerMenuController();
 		playerMenuController.Disable();
 	}
 
 	public void EnablePlayerMenuController() {
+		InitializePlayerMenuController();
 		playerMenuController.Enable();
+	}
+
+	private void InitializePlayerMenuController() {
+		if(playerMenuController == null) {
+			playerMenuController = GameObject.FindGameObjectWithTag("Player").GetComponent<MenuController>();
+		}
 	}
 }

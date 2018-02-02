@@ -98,14 +98,6 @@ public class DictionaryWindowManager : MonoBehaviour {
 		wordDefinitionText.text = currentlySelectedWordSlot.Word.Definition;
 	}
 
-	public int WordSlotRows {
-		get { return wordSlots.GetLength(0); }
-	}
-
-	public int WordSlotCols {
-		get { return wordSlots.GetLength(1); }
-	}
-
 	public void EnableDictionaryWindowController() {
 		if(dictionaryWindowController == null) {
 			dictionaryWindowController = GameObject.FindGameObjectWithTag("Player").GetComponent<DictionaryWindowController>();

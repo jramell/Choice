@@ -51,13 +51,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Combat System\ActionController.cs" />
+     <Compile Include="Assets\Scripts\Combat System\EquipmentManager.cs" />
      <Compile Include="Assets\Scripts\Crafting System\CraftingController.cs" />
      <Compile Include="Assets\Scripts\Crafting System\CraftingManager.cs" />
+     <Compile Include="Assets\Scripts\Crafting System\Equippables\Key.cs" />
+     <Compile Include="Assets\Scripts\Crafting System\Equippables\Shield.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Buff.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\DictionaryManager.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Equipment.cs" />
-     <Compile Include="Assets\Scripts\DictionarySystem\Equippables\Key.cs" />
-     <Compile Include="Assets\Scripts\DictionarySystem\Equippables\Shield.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Wearable.cs" />
      <Compile Include="Assets\Scripts\DictionarySystem\Word.cs" />
      <Compile Include="Assets\Scripts\Enums\Duration.cs" />

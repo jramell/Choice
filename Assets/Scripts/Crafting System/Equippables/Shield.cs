@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Shield : Equippable {
 
-	public override void Use() {
+	protected override void OnUsed() {
 		Debug.Log("Shield was used!");
 	}
 
-	public override void Break() {
-		throw new System.NotImplementedException();
+	public override void OnBreak() {
+		Debug.Log ("Shield broke!");
 	}
 
 	public override void OnCrafted() {
