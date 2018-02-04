@@ -48,7 +48,7 @@ public class Word : MonoBehaviour {
 			//tell player controller's BuffManager to apply buff
 		} else if(type == Word.EffectType.Equip) {
 			//tell the player controller's EquipmentManager to equip equipment
-			equippable.OnCrafted();
+			EquipmentManager.Instance.Equip(equippable);
 		}
 	}
 }

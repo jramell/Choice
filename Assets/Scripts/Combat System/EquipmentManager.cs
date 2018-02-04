@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour {
 
@@ -28,6 +26,7 @@ public class EquipmentManager : MonoBehaviour {
 		//depending on animation strctur, window.setWeapon("none") before setting next weapon
 		//window.setweapon("new equippable") ... let the animator handle the rest
 		currentEquipment = equippable;
+		currentEquipment.OnEquipped();
 		if(equippable.DurationType == Duration.Type.Seconds) {
 			//start coroutine that counts that
 		}
@@ -39,12 +38,19 @@ public class EquipmentManager : MonoBehaviour {
 		}
 		//window.set("using thing"), or other instruction related to animation
 		currentEquipment.Use();
-		if(currentEquipment.DurationType == Duration.Type.Uses) {
-			currentEquipment.remainingDuration--;
-			if(currentEquipment.remainingDuration == 0) {
+		if(currentEquipment.DurationType == Duration.Type.Uses) { 
+			//does not reduce item duration, since that's done by the item itself if its duration is uses
+			if(currentEquipment.remainingDuration <= 0) {
 				BreakCurrentEquipment();
 			}
 		}
+	}
+
+	public void StopUsingEquipment() {
+		if(currentEquipment == null) {
+			return;
+		}
+		currentEquipment.OnStopUsing();
 	}
 
 	private void BreakCurrentEquipment() {

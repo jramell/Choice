@@ -190,6 +190,7 @@ public class PlayerController : MonoBehaviour {
 		UpdateWallSlidingState();
 		ProcessWallSlidingInput();
 		LimitFallSpeed();
+		PlayerManager.Instance.UpdatePlayerOrientation(Mathf.Sign(targetVelocity.x));
 		rigidbody2D.velocity = targetVelocity;
 	}
 

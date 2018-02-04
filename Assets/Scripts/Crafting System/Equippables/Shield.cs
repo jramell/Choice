@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,11 @@ public class Shield : Equippable {
 		Debug.Log ("Shield broke!");
 	}
 
-	public override void OnCrafted() {
-		Debug.Log("Shield was crafted!");
+	public override void OnEquipped() {
+		Debug.Log("Shield was equipped!");
+	}
+
+	public override void OnStopUsing() {
+		throw new NotImplementedException();
 	}
 }

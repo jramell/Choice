@@ -92,6 +92,7 @@ public class SystemManager : MonoBehaviour {
 	private void TransitionFromPlayerMenu() {
 		AwakeInteraction();
 		EnablePauseMenu();
+		EnablePlayerMenu();
 		UnpauseGame();
 	}
 
@@ -112,11 +113,11 @@ public class SystemManager : MonoBehaviour {
 
 	private void EnablePlayerMenu() {
 		//DictionaryWindowManager.Instance.DisableDictionaryWindowController();
-		MenuNavigationManager.Instance.DisablePlayerMenuController();
+		MenuNavigationManager.Instance.EnablePlayerMenuController();
 	}
 
 	private void DisablePlayerMenu() {
-		MenuNavigationManager.Instance.EnablePlayerMenuController();
+		MenuNavigationManager.Instance.DisablePlayerMenuController();
 	}
 
 	private void SuspendInteraction() {

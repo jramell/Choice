@@ -51,6 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Combat System\Actionables\Door.cs" />
+     <Compile Include="Assets\Scripts\Combat System\Actionables\Interfaces\IOpenable.cs" />
      <Compile Include="Assets\Scripts\Combat System\ActionController.cs" />
      <Compile Include="Assets\Scripts\Combat System\EquipmentManager.cs" />
      <Compile Include="Assets\Scripts\Crafting System\CraftingController.cs" />
@@ -65,6 +67,7 @@
      <Compile Include="Assets\Scripts\Enums\Duration.cs" />
      <Compile Include="Assets\Scripts\Enums\GameSystem.cs" />
      <Compile Include="Assets\Scripts\Enums\Interaction.cs" />
+     <Compile Include="Assets\Scripts\GameStateManager.cs" />
      <Compile Include="Assets\Scripts\IController.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Conversation.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Dialog.cs" />
@@ -79,7 +82,10 @@
      <Compile Include="Assets\Scripts\Magueo.cs" />
      <Compile Include="Assets\Scripts\Pause System\PauseManager.cs" />
      <Compile Include="Assets\Scripts\Pause System\PauseMenuController.cs" />
+     <Compile Include="Assets\Scripts\Player\IPlayerStateChangedListener.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerManager.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerState.cs" />
      <Compile Include="Assets\Scripts\SystemManager.cs" />
      <Compile Include="Assets\Scripts\UI\GridLayoutResizer.cs" />
      <Compile Include="Assets\Scripts\UI\MenuController.cs" />

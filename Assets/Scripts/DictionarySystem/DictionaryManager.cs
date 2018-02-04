@@ -26,7 +26,8 @@ public class DictionaryManager : MonoBehaviour {
 		}
 		if(knownWords == null) {
 			knownWords = new Dictionary<string, Word>();
-		} 
+		}
+		Debug.Log("DictionaryManager.AddWord(word), word added = " + word);
 		knownWords.Add(word.WordName, word);
 		DictionaryWindowManager.Instance.AddWord(word);
 	}
@@ -44,7 +45,9 @@ public class DictionaryManager : MonoBehaviour {
 	/// <returns>Word with name wordName if it's found in the player's dictionary. Null otherwise</returns>
 	public Word GetWordWithName(string wordName) {
 		Word answer = null;
-		knownWords.TryGetValue(wordName, out answer);
+		if(knownWords != null) {
+			knownWords.TryGetValue(wordName, out answer);
+		}
 		return answer;
 	}
 }

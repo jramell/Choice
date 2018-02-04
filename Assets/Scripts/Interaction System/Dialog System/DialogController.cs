@@ -16,6 +16,10 @@ public class DialogController : MonoBehaviour {
 	/// </summary>
 	private Talker currentTalker;
 
+	void Start() {
+		enabled = false;
+	}
+
 	//TODO: it's for PC version, mobile version could simply listen for clicks in the interface.
 	void Update() {
 		if (ButtonToTalkPressed()) {

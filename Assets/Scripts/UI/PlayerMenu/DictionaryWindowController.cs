@@ -81,10 +81,8 @@ public class DictionaryWindowController : MonoBehaviour, IController {
 		if(PlayerWantsToCraft()) {
 			if(craftWindowOpen) {
 				string word = craftingInputField.text;
-				if(CraftingManager.Instance.IsCraftable(word)) {
-					ExitPlayerMenu(); //opens the way for the Craftable UI to handle setting icons and other stuff
-					CraftingManager.Instance.Craft(word);
-				}
+				ExitPlayerMenu();
+				CraftingManager.Instance.Craft(word);
 			} else {
 				OpenCraftWindow();
 			}
@@ -156,6 +154,7 @@ public class DictionaryWindowController : MonoBehaviour, IController {
 		craftingInputFieldObject.SetActive(true);
 		craftWindowOpen = true;
 		craftButton.transform.Find("Icon").GetComponent<Image>().sprite = craftButtonActiveIcon;
+		craftingInputField.ActivateInputField();
 	}
 
 	private void CloseCraftWindow() {

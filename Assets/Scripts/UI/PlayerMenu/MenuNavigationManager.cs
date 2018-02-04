@@ -50,7 +50,6 @@ public class MenuNavigationManager : MonoBehaviour {
 
 	public void ExitPlayerMenu() {
 		currentWindowController.Disable();
-		DisablePlayerMenuController();
 		SystemManager.Instance.UnregisterActiveSystem(GameSystem.Type.PlayerMenu);
 	}
 

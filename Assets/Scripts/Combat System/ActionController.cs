@@ -10,10 +10,16 @@ public class ActionController : MonoBehaviour {
 	void Update() {
 		if(PlayerWantsToUseEquippedObject()) {
 			EquipmentManager.Instance.UseEquipment();
+		} else if(PlayerWantsToStopUsingEquippedObject()) {
+			EquipmentManager.Instance.StopUsingEquipment();
 		}
 	}
 
 	private bool PlayerWantsToUseEquippedObject() {
 		return Input.GetKey(KeyCode.X);
+	}
+
+	private bool PlayerWantsToStopUsingEquippedObject() {
+		return Input.GetKeyUp(KeyCode.X);
 	}
 }

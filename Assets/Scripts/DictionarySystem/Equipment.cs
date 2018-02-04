@@ -17,11 +17,16 @@ public abstract class Equippable : Wearable {
 	}
 
 	/// <summary>
-	/// Executed when the player wants to use the equippable. Handles moving a hitbox and checking for certain interactables
+	/// Executed when player is able to use the equippable. Handles moving a hitbox and checking for certain interactables
 	/// within it, in order to interact with them. Animation and other transitions are handled by the EquipmentController,
 	/// since it listens for player input. Cooldown calculations are handled automatically by Equipment base class.
 	/// </summary>
 	protected abstract void OnUsed();
+
+	/// <summary>
+	/// Executed when the equipment was being used, and stops being used by the player.
+	/// </summary>
+	public abstract void OnStopUsing();
 
 	/// <summary>
 	/// Executed when the equippable the player is currently using breaks. Handles any on-breaking effects the Equipment
@@ -31,9 +36,9 @@ public abstract class Equippable : Wearable {
 	public abstract void OnBreak();
 
 	/// <summary>
-	/// Executed when the equippable is crafted. 
+	/// Executed when the equippable is equipped by the player
 	/// </summary>
-	public virtual void OnCrafted() {
+	public virtual void OnEquipped() {
 
 	}
 }
