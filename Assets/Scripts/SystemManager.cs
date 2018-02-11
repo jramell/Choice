@@ -14,6 +14,7 @@ public class SystemManager : MonoBehaviour {
 
 	private static SystemManager instance;
 	private PauseMenuController pauseMenuController;
+	private ActionController actionController;
 
 	void Awake() {
 		if(instance == null) {
@@ -32,7 +33,7 @@ public class SystemManager : MonoBehaviour {
 		if (systemType == GameSystem.Type.PauseMenu) {
 			TransitionToPauseMenu();
 		} else if (systemType == GameSystem.Type.Interaction) {
-			TransitionToInteraction ();
+			TransitionToInteraction();
 		} else if (systemType == GameSystem.Type.PlayerMenu) {
 			TransitionToPlayerMenu();
 		}
@@ -57,6 +58,7 @@ public class SystemManager : MonoBehaviour {
 	private void TransitionToPauseMenu() {
 		SuspendInteraction();
 		DisablePlayerMenu();
+		DisableActionInput();
 		PauseGame();
 		//can't do anything else while game is paused
 	}
@@ -64,6 +66,7 @@ public class SystemManager : MonoBehaviour {
 	private void TransitionFromPauseMenu() {
 		AwakeInteraction();
 		EnablePlayerMenu();
+		EnableActionInput();
 		UnpauseGame();
 	}
 
@@ -73,6 +76,7 @@ public class SystemManager : MonoBehaviour {
 	private void TransitionToInteraction() {
 		DisablePauseMenu();
 		DisablePlayerMenu();
+		DisableActionInput();
 	}
 
 	/// <summary>
@@ -81,12 +85,14 @@ public class SystemManager : MonoBehaviour {
 	private void TransitionFromInteraction() {
 		EnablePauseMenu();
 		EnablePlayerMenu();
+		EnableActionInput();
 	}
 
 	private void TransitionToPlayerMenu() {
 		SuspendInteraction();
 		DisablePauseMenu();
 		PauseGame();
+		DisableActionInput();
 	}
 
 	private void TransitionFromPlayerMenu() {
@@ -94,6 +100,7 @@ public class SystemManager : MonoBehaviour {
 		EnablePauseMenu();
 		EnablePlayerMenu();
 		UnpauseGame();
+		EnableActionInput();
 	}
 
 	#endregion
@@ -102,7 +109,7 @@ public class SystemManager : MonoBehaviour {
 
 	private void DisablePauseMenu() {
 		if(pauseMenuController == null) {
-			pauseMenuController = GameObject.FindGameObjectWithTag("Player").GetComponent<PauseMenuController>();
+			pauseMenuController = PlayerManager.Instance.PlayerGameObject.GetComponent<PauseMenuController>();
 		}
 		pauseMenuController.Disable();
 	}
@@ -129,12 +136,22 @@ public class SystemManager : MonoBehaviour {
 	}
 
 	private void PauseGame() {
-		
 		PauseManager.Instance.Pause();
 	}
 
 	private void UnpauseGame() {
 		PauseManager.Instance.Unpause();
+	}
+
+	private void DisableActionInput() {
+		if(actionController == null) {
+			actionController = PlayerManager.Instance.PlayerGameObject.GetComponent<ActionController>();
+		}
+		actionController.Disable();
+	}
+
+	private void EnableActionInput() {
+		actionController.Enable();
 	}
 
 	#endregion

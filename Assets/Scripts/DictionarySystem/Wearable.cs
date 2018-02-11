@@ -12,20 +12,19 @@ public abstract class Wearable : MonoBehaviour {
 	[SerializeField]
 	[Tooltip("How many wear events the object can handle before wearing out completely. Wear events' nature depends on the Duration Type." +
 		" A duration type of seconds means the object wears down in time, while a duration type of uses means it wears down every time it's used")]
-	private float duration;
+	protected float duration;
 	
-	[System.NonSerialized]
-	public float remainingDuration;
+	protected float remainingDuration;
 
 	protected virtual void Start() {
-		if(durationType == Duration.Type.Uses) {
-			duration = (int)duration;
-		}
 		remainingDuration = duration;
 	}
 
-
 	public Duration.Type DurationType {
 		get { return durationType; }
+	}
+
+	public float RemainingDuration {
+		get { return remainingDuration; }
 	}
 }

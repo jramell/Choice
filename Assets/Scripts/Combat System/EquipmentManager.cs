@@ -40,7 +40,7 @@ public class EquipmentManager : MonoBehaviour {
 		currentEquipment.Use();
 		if(currentEquipment.DurationType == Duration.Type.Uses) { 
 			//does not reduce item duration, since that's done by the item itself if its duration is uses
-			if(currentEquipment.remainingDuration <= 0) {
+			if(currentEquipment.RemainingDuration <= 0) {
 				BreakCurrentEquipment();
 			}
 		}
@@ -54,6 +54,7 @@ public class EquipmentManager : MonoBehaviour {
 	}
 
 	private void BreakCurrentEquipment() {
+		currentEquipment.OnStopUsing();
 		currentEquipment.OnBreak(); //sfx and things
 		Unequip();
 	}

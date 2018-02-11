@@ -10,6 +10,11 @@ public class GridLayoutResizer : MonoBehaviour {
 	[Tooltip("Prefab of a cell to be contained by the grid")]
 	public GameObject cellPrefab;
 
+	[Tooltip("Rect transform the cells will belong to")]
+	public RectTransform parentRect;
+
+	[Tooltip("GridLayoutGroup the cells will belong to")]
+	public GridLayoutGroup gridLayoutGroup;
 
 	[Header("Spacing Settings")]
 	/// <summary>
@@ -33,13 +38,11 @@ public class GridLayoutResizer : MonoBehaviour {
 	public GameObject[,] gridCells;
 
 	void Start() {
-		RectTransform parentRect = gameObject.GetComponent<RectTransform>();
-		GridLayoutGroup gridLayout = gameObject.GetComponent<GridLayoutGroup>();
 		gridCells = new GameObject[numberOfRows, numberOfCols];
 		if(calculateSpacing) {
-			CalculateSpacing(parentRect, gridLayout);
+			CalculateSpacing(parentRect, gridLayoutGroup);
 		}
-		CalculateCellSize(parentRect, gridLayout);
+		CalculateCellSize(parentRect, gridLayoutGroup);
 		DictionaryWindowManager.Instance.InitializeWordSlots(gridCells);
 	}
 
@@ -56,7 +59,7 @@ public class GridLayoutResizer : MonoBehaviour {
 		for (int i = 0; i < numberOfRows; i++) {
 			for (int j = 0; j < numberOfCols; j++) {
 				GameObject wordSlot = Instantiate(cellPrefab);
-				wordSlot.transform.SetParent(gameObject.transform, false);
+				wordSlot.transform.SetParent(parentRect.gameObject.transform, false);
 				gridCells[i,j] = wordSlot;
 			}
 		}

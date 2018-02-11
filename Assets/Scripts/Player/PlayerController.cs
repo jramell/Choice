@@ -296,6 +296,7 @@ public class PlayerController : MonoBehaviour {
 				Debug.DrawRay(groundChecks[i].position, Vector2.down * groundCheckDistance, Color.red);
 			}
 		}
+		Debug.Log("isGrounded = " + isGrounded);
 	}
 
 	/// <summary>

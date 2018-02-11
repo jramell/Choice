@@ -22,4 +22,12 @@ public class ActionController : MonoBehaviour {
 	private bool PlayerWantsToStopUsingEquippedObject() {
 		return Input.GetKeyUp(KeyCode.X);
 	}
+
+	public void Enable() {
+		enabled = true;
+	}
+
+	public void Disable() {
+		enabled = false;
+	}
 }
