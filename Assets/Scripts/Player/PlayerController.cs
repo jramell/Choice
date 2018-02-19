@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour {
 	/// </summary>
 	[SerializeField]
 	[Tooltip("If object within WhatIsMask is closer than groundCheckDistance to any position in this list, the player will be considered grounded. There would normally be groundChecks in the player's feet")]
-	private Transform[] groundChecks; 
+	private Transform[] groundChecks;
 
 	/// <summary>
 	/// If groundCheck is at this distance or less from an object in a layer within WhatIsMask, the player will be considered grounded
@@ -163,6 +163,9 @@ public class PlayerController : MonoBehaviour {
 	/// Reference to the player's rigidbody2D.
 	/// </summary>
 	private Rigidbody2D rigidbody2D;
+
+	private bool isJumping = false;
+
 	#endregion
 
 	void Start() {
@@ -180,7 +183,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update() { //the order the state of things is updated and differents part of the input processed is important
-		targetVelocity = rigidbody2D.velocity; //should handle X axis acceleration!!
+		targetVelocity = rigidbody2D.velocity; 
 		UpdateIsGrounded();
 		ProcessHorizontalMovementInput();
 		ProcessJumpInput();
@@ -296,7 +299,9 @@ public class PlayerController : MonoBehaviour {
 				Debug.DrawRay(groundChecks[i].position, Vector2.down * groundCheckDistance, Color.red);
 			}
 		}
-		Debug.Log("isGrounded = " + isGrounded);
+		if(isGrounded) {
+			isJumping = false;
+		}
 	}
 
 	/// <summary>
@@ -305,7 +310,9 @@ public class PlayerController : MonoBehaviour {
 	void ProcessJumpInput() {
 		if (CanJump() && PlayerWantsToJump()) {
 			Jump();
-		} else if (!isGrounded && PlayerWantsToInterruptJump()) {
+		}
+		if (PlayerWantsToInterruptJump()) {
+			Debug.Log("cancelled jump");
 			targetVelocity.y = Mathf.Min(targetVelocity.y, earlyJumpTerminationVelocity);
 		}
 	}
@@ -315,14 +322,15 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	bool PlayerWantsToJump() {
-		return Input.GetKeyDown(KeyCode.Space);
+		return Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Z);
 	}
 
 	bool PlayerWantsToInterruptJump() {
-		return Input.GetKeyUp(KeyCode.Space);
+		return Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Z);
 	}
 
 	void Jump() {
+		isJumping = true;
 		targetVelocity.y = jumpVelocity;
 	}
 

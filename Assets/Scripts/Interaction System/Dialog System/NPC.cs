@@ -6,7 +6,14 @@ using UnityEngine;
 /// Contains data for a certain NPC. Is attached to any object. Could be a Scriptable Object, eventually.
 /// </summary>
 public class NPC : MonoBehaviour {
-	public string _name;
+	[SerializeField]
+	private string _name;
+
 	public AudioSource voiceSFX;
+
 	public Animator animator;
+
+	public string Name {
+		get { return _name; }
+	}
 }

@@ -9,6 +9,12 @@ using UnityEngine.UI;
 public class DialogManager : MonoBehaviour {
 
 	/// <summary>
+	/// Time before drawing the first character after dialog start
+	/// </summary>
+	[Tooltip("Time before drawing the first character after dialog start")]
+	public float startDelay = 0.05f;
+
+	/// <summary>
 	/// Time between each character of a dialog getting drawn.
 	/// </summary>
 	[Tooltip("Time between each character of a dialog getting drawn")]
@@ -26,6 +32,7 @@ public class DialogManager : MonoBehaviour {
 	private static DialogManager instance;
 	private Dialog currentDialog;
 	private Coroutine drawingCoroutine;
+	private CharacterParser characterParser;
 
 	void Awake() {
 		if(instance == null) {
@@ -34,6 +41,10 @@ public class DialogManager : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		DontDestroyOnLoad(gameObject);
+	}
+
+	void Start() {
+		characterParser = new CharacterParser();
 	}
 
 	public static DialogManager Instance {
@@ -57,25 +68,30 @@ public class DialogManager : MonoBehaviour {
 		}
 		if (!IsInConversation()) {
 			dialogBoxAnimator.SetBool("Open", true);
-			dialogText.gameObject.SetActive(true); //for performance, as noted in 
+			dialogText.gameObject.SetActive(true); //for performance, as noted in https://www.youtube.com/watch?v=_wxitgdx-UI
 		}
-		if(dialog.useNPCVoiceSFX) {
-			dialog.Interlocutor.voiceSFX.Play(); //SFX is NPC's voice
-		} else {
-			dialog.soundEffect.Play(); //SFX is the custom one defined in the dialog
-		}
+		dialog.PlaySoundEffect();
 		InteractionManager.Instance.RegisterActiveInteraction(Interaction.Type.Talk);
 		currentDialog = dialog;
 		DisplayCurrentDialog();
+		HandleCurrentDialogCustomAction();
 	}
 
 	private void DisplayCurrentDialog()  {
 		drawingCoroutine = StartCoroutine(DrawDialogCharacters());
 	}
 
+	private void HandleCurrentDialogCustomAction() {
+		if(currentDialog.customActionType == CustomAction.Type.EnableButton) {
+			currentDialog.buttonToEnable.gameObject.SetActive(true);
+			currentDialog.buttonToEnable.interactable = true; //TODO: Could improve performance by sticking to a standard in Editor,
+													//i.e., button are always interactable 
+		}
+	}
+
 	public void SkipCurrentDialog() {
 		AbortDrawingCharacters();
-		dialogText.text = currentDialog.Sentence;
+		dialogText.text = InterlocutorNameInBold() + currentDialog.Sentence;
 	}
 
 	private void AbortDrawingCharacters() {
@@ -88,10 +104,15 @@ public class DialogManager : MonoBehaviour {
 	/// </summary>
 	/// <returns>The dialog characters.</returns>
 	private IEnumerator DrawDialogCharacters() {
-		dialogText.text = ""; //just to be safe, in case DialogManager does not do this in other methods
-		foreach (char character in currentDialog.Sentence) {
+		//TODO: Take into account that the interlocutor may not have a name
+		dialogText.text = InterlocutorNameInBold();
+		characterParser.LoadDialog(currentDialog.Sentence);
+		string nextString = "dummy";
+		yield return new WaitForSeconds(startDelay);
+		while (nextString != "") {
+			nextString = characterParser.NextString();
+			dialogText.text += nextString;
 			yield return new WaitForSeconds(drawSpeed);
-			dialogText.text += character;
 		}
 		drawingCoroutine = null;
 	}
@@ -106,5 +127,9 @@ public class DialogManager : MonoBehaviour {
 
 	public bool IsInConversation() {
 		return currentDialog != null;
+	}
+
+	private string InterlocutorNameInBold() {
+		return "<b>" + currentDialog.Interlocutor.Name + ":</b> ";
 	}
 }

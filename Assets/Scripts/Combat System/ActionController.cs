@@ -16,11 +16,11 @@ public class ActionController : MonoBehaviour {
 	}
 
 	private bool PlayerWantsToUseEquippedObject() {
-		return Input.GetKey(KeyCode.X);
+		return Input.GetAxis("Fire1") > 0;
 	}
 
 	private bool PlayerWantsToStopUsingEquippedObject() {
-		return Input.GetKeyUp(KeyCode.X);
+		return Input.GetAxis("Fire1") <= 0;
 	}
 
 	public void Enable() {

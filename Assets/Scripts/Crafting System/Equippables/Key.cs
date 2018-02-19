@@ -20,7 +20,6 @@ public class Key : Equippable {
 	private BoxCollider2D hitbox;
 
 	void Start() {
-		Debug.Log("key start, remainingDuration = " + remainingDuration);
 		hitbox.enabled = false;
 	}
 
@@ -43,7 +42,6 @@ public class Key : Equippable {
 	}
 
 	public override void OnBreak() {
-		Debug.Log("remainingDuration = " + remainingDuration);
 		ResetAnimator();
 		gameObject.SetActive(false);
 		enabled = false;
@@ -95,7 +93,6 @@ public class Key : Equippable {
 	void OnTriggerEnter2D(Collider2D col) {
 		IOpenable openableCollidedWith = col.gameObject.GetComponent<IOpenable>();
 		if (openableCollidedWith != null) {
-			Debug.Log("Key collided with openable: " + col.gameObject.name);
 			openableCollidedWith.OnOpened();
 			remainingDuration--;
 		}

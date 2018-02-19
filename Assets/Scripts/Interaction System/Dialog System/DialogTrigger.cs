@@ -17,6 +17,10 @@ public class DialogTrigger : MonoBehaviour, IInteractionTrigger {
 	/// </summary>
 	private DialogController dialogInputManager;
 
+	void Start() {
+		GetComponent<Collider2D>().isTrigger = true;
+	}
+
 	void OnTriggerEnter2D(Collider2D collider2d) {
 		if(collider2d.tag == "Player") {
 			if (dialogInputManager == null) {

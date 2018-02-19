@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Contains information necessary to say one thing. This is: who is saying the thing, what SFX should be played
@@ -24,13 +23,20 @@ public class Dialog : MonoBehaviour {
 	/// </summary>
 	[SerializeField]
 	[Tooltip("The sound effect that accompanies the dialog. Could be voice over")]
-	public AudioSource soundEffect;
+	private AudioSource soundEffect;
 
 	/// <summary>
 	/// If true, the sound effect used will be the NPC's voice SFX.
 	/// </summary>
 	[Tooltip("If true, the sound effect used will be the NPC's voice SFX")]
-	public bool useNPCVoiceSFX = true;
+	[SerializeField]
+	private bool useNPCVoiceSFX = true;
+
+	[Tooltip("Type of custom action this dialog does")]
+	public CustomAction.Type customActionType = CustomAction.Type.None;
+
+	[Tooltip("If Custom Action Type is EnableButton, this is the Button to be enabled. Otherwise, does nothing")]
+	public Button buttonToEnable;
 
 	public string Sentence {
 		get { return sentence; }
@@ -38,5 +44,13 @@ public class Dialog : MonoBehaviour {
 
 	public NPC Interlocutor {
 		get { return interlocutor; }
+	}
+
+	public void PlaySoundEffect() {
+		if (useNPCVoiceSFX && interlocutor.voiceSFX != null) {
+			interlocutor.voiceSFX.Play(); //SFX is NPC's voice
+		} else if(soundEffect != null) {
+			soundEffect.Play(); //SFX is the custom one defined in the dialog
+		}
 	}
 }

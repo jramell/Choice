@@ -6,7 +6,7 @@ public class EquipmentManager : MonoBehaviour {
 	private Equippable currentEquipment;
 
 	void Awake() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = this;
 		} else {
 			Destroy(gameObject);
@@ -27,27 +27,23 @@ public class EquipmentManager : MonoBehaviour {
 		//window.setweapon("new equippable") ... let the animator handle the rest
 		currentEquipment = equippable;
 		currentEquipment.OnEquipped();
-		if(equippable.DurationType == Duration.Type.Seconds) {
+		if (equippable.DurationType == Duration.Type.Seconds) {
 			//start coroutine that counts that
 		}
 	}
 
 	public void UseEquipment() {
-		if(currentEquipment == null) {
+		HandleEquipmentRemainingDuration();
+		if (currentEquipment == null) {
 			return;
 		}
 		//window.set("using thing"), or other instruction related to animation
 		currentEquipment.Use();
-		if(currentEquipment.DurationType == Duration.Type.Uses) { 
-			//does not reduce item duration, since that's done by the item itself if its duration is uses
-			if(currentEquipment.RemainingDuration <= 0) {
-				BreakCurrentEquipment();
-			}
-		}
 	}
 
 	public void StopUsingEquipment() {
-		if(currentEquipment == null) {
+		HandleEquipmentRemainingDuration();
+		if (currentEquipment == null) {
 			return;
 		}
 		currentEquipment.OnStopUsing();
@@ -61,5 +57,17 @@ public class EquipmentManager : MonoBehaviour {
 
 	private void Unequip() {
 		currentEquipment = null;
+	}
+
+	private void HandleEquipmentRemainingDuration() {
+		if (currentEquipment == null) {
+			return;
+		}
+		if (currentEquipment.DurationType == Duration.Type.Uses) {
+			//does not reduce item duration, since that's done by the item itself if its duration is uses
+			if (currentEquipment.RemainingDuration <= 0) {
+				BreakCurrentEquipment();
+			}
+		}
 	}
 }
