@@ -6,24 +6,39 @@ using UnityEngine;
 /// </summary>
 public class SimpleDoorAnimator : DoorAnimator {
 
+	public enum Direction {
+		Up, Down, Left, Right
+	}
 	/// <summary>
-	/// How much does the door raise 
+	/// How much does the door move 
 	/// </summary>
-	public float raiseAmount;
+	public float moveAmount;
 
 	/// <summary>
-	/// How long does the door take to raise in seconds
+	/// How long does the door take to move in seconds
 	/// </summary>
-	public float raiseTime;
+	public float moveTime;
 
-	private float raiseStepPerSecond;
-	private float currentRaise = 0;
+	public Direction moveDirection;
+
+	private float moveStepPerSecond;
+	private float currentMove = 0;
+	private float animationStepLength = 0.015f;
+	private float xChangePerStep = 0;
+	private float yChangePerStep = 0;
 
 	private Coroutine openAnimation;
 	private Coroutine closeAnimation;
 
 	void Start() {
-		raiseStepPerSecond = raiseAmount / raiseTime;
+		moveStepPerSecond = moveAmount / moveTime;
+		if(moveDirection == Direction.Up || moveDirection == Direction.Down) {
+			float verticalDirectionModifier = moveDirection == Direction.Up ? 1 : -1;
+			yChangePerStep = moveStepPerSecond * 0.015f * verticalDirectionModifier;
+		} else {
+			float horizontalDirectionModifier = moveDirection == Direction.Right ? 1 : -1;
+			xChangePerStep = moveStepPerSecond * 0.015f * horizontalDirectionModifier;
+		}
 	}
 
 	public override void Open() {
@@ -41,23 +56,23 @@ public class SimpleDoorAnimator : DoorAnimator {
 	}
 
 	IEnumerator PlayOpenAnimation() {
-		while(currentRaise < raiseAmount) {
-			transform.position = new Vector2(transform.position.x, transform.position.y + raiseStepPerSecond * 0.015f);
+		while(currentMove < moveAmount) {
+			transform.position = new Vector2(transform.position.x + xChangePerStep, transform.position.y + yChangePerStep);
 			yield return new WaitForSeconds(0.015f);
-			currentRaise += raiseStepPerSecond * 0.015f;
+			currentMove += moveStepPerSecond * 0.015f;
 		}
-		currentRaise = 0;
+		currentMove = 0;
 		open = true;
 		openAnimation = null;
 	}
 
 	IEnumerator PlayCloseAnimation() {
-		while (currentRaise < raiseAmount) {
-			transform.position = new Vector2(transform.position.x, transform.position.y - raiseStepPerSecond * 0.015f);
+		while (currentMove < moveAmount) {
+			transform.position = new Vector2(transform.position.x - xChangePerStep, transform.position.y - yChangePerStep);
 			yield return new WaitForSeconds(0.015f);
-			currentRaise += raiseStepPerSecond * 0.015f;
+			currentMove += moveStepPerSecond * 0.015f;
 		}
-		currentRaise = 0;
+		currentMove = 0;
 		open = false;
 		closeAnimation = null;
 	}

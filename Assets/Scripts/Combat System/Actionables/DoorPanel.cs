@@ -7,11 +7,15 @@ public class DoorPanel : MonoBehaviour, IOpenable {
 
 	public DoorAnimator[] doorsToOpen;
 
-	void Start() {
+	public bool reusable = true;
 
-	}
+	private int timesUsed = 0;
 
 	public void OnOpened() {
+		if(!reusable && timesUsed > 0) {
+			return;
+		}
+		++timesUsed;
 		foreach(DoorAnimator doorAnimator in doorsToOpen) {
 			doorAnimator.Toggle();
 		}

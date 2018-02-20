@@ -74,18 +74,22 @@ public class DialogManager : MonoBehaviour {
 		InteractionManager.Instance.RegisterActiveInteraction(Interaction.Type.Talk);
 		currentDialog = dialog;
 		DisplayCurrentDialog();
-		HandleCurrentDialogCustomAction();
+		HandleCurrentDialogCustomActionOpen();
 	}
 
 	private void DisplayCurrentDialog()  {
 		drawingCoroutine = StartCoroutine(DrawDialogCharacters());
 	}
 
-	private void HandleCurrentDialogCustomAction() {
+	private void HandleCurrentDialogCustomActionOpen() {
 		if(currentDialog.customActionType == CustomAction.Type.EnableButton) {
-			currentDialog.buttonToEnable.gameObject.SetActive(true);
-			currentDialog.buttonToEnable.interactable = true; //TODO: Could improve performance by sticking to a standard in Editor,
-													//i.e., button are always interactable 
+			SetDialogButtonEnabled(true);
+		}
+	}
+
+	private void HandleCurrentDialogCustomActionClose() {
+		if (currentDialog.customActionType == CustomAction.Type.EnableButton) {
+			SetDialogButtonEnabled(false);
 		}
 	}
 
@@ -119,10 +123,17 @@ public class DialogManager : MonoBehaviour {
 
 	private void FinishConversation() {
 		dialogText.gameObject.SetActive(false); //avoids re-drawing costs when emptying the dialogText's text.
-		dialogText.text = "";
 		dialogBoxAnimator.SetBool("Open", false);
+		HandleCurrentDialogCustomActionClose();
 		currentDialog = null;
+		//dialogText.text = "";
 		InteractionManager.Instance.UnregisterActiveInteraction();
+	}
+
+	private void SetDialogButtonEnabled(bool enabled) {
+		currentDialog.buttonToEnable.gameObject.SetActive(enabled);
+		currentDialog.buttonToEnable.interactable = enabled; //TODO: Could improve performance by sticking to a standard in Editor,
+														  //i.e., button are always interactable 
 	}
 
 	public bool IsInConversation() {

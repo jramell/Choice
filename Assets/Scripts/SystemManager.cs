@@ -30,12 +30,14 @@ public class SystemManager : MonoBehaviour {
 	}
 
 	public void RegisterActiveSystem(GameSystem.Type systemType) {
-		if (systemType == GameSystem.Type.PauseMenu) {
+		if(systemType == GameSystem.Type.PauseMenu) {
 			TransitionToPauseMenu();
-		} else if (systemType == GameSystem.Type.Interaction) {
+		} else if(systemType == GameSystem.Type.Interaction) {
 			TransitionToInteraction();
-		} else if (systemType == GameSystem.Type.PlayerMenu) {
+		} else if(systemType == GameSystem.Type.PlayerMenu) {
 			TransitionToPlayerMenu();
+		} else if(systemType == GameSystem.Type.PickupUI) {
+			TransitionToPickupUI();
 		}
 	}
 
@@ -46,6 +48,8 @@ public class SystemManager : MonoBehaviour {
 			TransitionFromInteraction();
 		} else if (systemType == GameSystem.Type.PlayerMenu) {
 			TransitionFromPlayerMenu();
+		} else if (systemType == GameSystem.Type.PickupUI) {
+			TransitionFromPickupUI();
 		}
 	}
 
@@ -101,6 +105,22 @@ public class SystemManager : MonoBehaviour {
 		EnablePlayerMenu();
 		UnpauseGame();
 		EnableActionInput();
+	}
+
+	private void TransitionToPickupUI() {
+		SuspendInteraction();
+		DisablePauseMenu();
+		DisableActionInput();
+		PauseGame();
+		DisablePlayerMenu();
+	}
+
+	private void TransitionFromPickupUI() {
+		AwakeInteraction();
+		EnablePauseMenu();
+		EnableActionInput();
+		UnpauseGame();
+		EnablePlayerMenu();
 	}
 
 	#endregion

@@ -54,6 +54,8 @@
      <Compile Include="Assets\Animators\DoorAnimator.cs" />
      <Compile Include="Assets\Animators\SimpleDoorAnimator.cs" />
      <Compile Include="Assets\Scripts\Camera\Parallaxer.cs" />
+     <Compile Include="Assets\Scripts\Collection System\PickupButton.cs" />
+     <Compile Include="Assets\Scripts\Collection System\PickupManager.cs" />
      <Compile Include="Assets\Scripts\Combat System\Actionables\DoorPanel.cs" />
      <Compile Include="Assets\Scripts\Combat System\Actionables\Interfaces\IOpenable.cs" />
      <Compile Include="Assets\Scripts\Combat System\Actionables\Interfaces\IShockable.cs" />
@@ -75,6 +77,7 @@
      <Compile Include="Assets\Scripts\Enums\Duration.cs" />
      <Compile Include="Assets\Scripts\Enums\GameSystem.cs" />
      <Compile Include="Assets\Scripts\Enums\Interaction.cs" />
+     <Compile Include="Assets\Scripts\Enums\Pickup.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />
      <Compile Include="Assets\Scripts\IController.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\CharacterParser.cs" />
@@ -103,6 +106,7 @@
      <Compile Include="Assets\Scripts\SystemManager.cs" />
      <Compile Include="Assets\Scripts\UI\GridLayoutResizer.cs" />
      <Compile Include="Assets\Scripts\UI\MenuController.cs" />
+     <Compile Include="Assets\Scripts\UI\Pickup Window\PickupUIManager.cs" />
      <Compile Include="Assets\Scripts\UI\PlayerMenu\DictionaryWindowController.cs" />
      <Compile Include="Assets\Scripts\UI\PlayerMenu\DictionaryWindowManager.cs" />
      <Compile Include="Assets\Scripts\UI\PlayerMenu\MenuNavigationManager.cs" />

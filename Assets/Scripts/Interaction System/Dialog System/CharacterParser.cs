@@ -37,6 +37,7 @@ public class CharacterParser {
 		if(string.IsNullOrEmpty(sentence)) {
 			return;
 		}
+		ResetState();
 		currentSentence = sentence;
 	}
 

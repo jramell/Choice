@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour {
 	/// </summary>
 	private float inputX;
 
-	private float velocityXSmoothing;
+	private float velocityXSmoothing = 0f;
 
 	/// <summary>
 	/// Y-axis velocity of the player when they jump. Calculated in Start() according to maxJumpHeight and timeToApex.
@@ -194,6 +194,9 @@ public class PlayerController : MonoBehaviour {
 		ProcessWallSlidingInput();
 		LimitFallSpeed();
 		PlayerManager.Instance.UpdatePlayerOrientation(Mathf.Sign(targetVelocity.x));
+		if(float.IsNaN(targetVelocity.x)) {
+			targetVelocity.x = 0;
+		}
 		rigidbody2D.velocity = targetVelocity;
 	}
 
@@ -205,7 +208,7 @@ public class PlayerController : MonoBehaviour {
 		inputX = Input.GetAxisRaw("Horizontal");
 		float accelerationTime = isGrounded ? accelerationTimeGrounded : accelerationTimeAirborne;
 		//Mathf.SmoothDamp handles acceleration, basically
-		targetVelocity.x = Mathf.SmoothDamp (rigidbody2D.velocity.x, inputX * speed * Time.deltaTime, ref velocityXSmoothing, accelerationTime);
+		targetVelocity.x = Mathf.SmoothDamp(rigidbody2D.velocity.x, inputX * speed, ref velocityXSmoothing, accelerationTime);
 	}
 
 	private void UpdateWallSlidingState() {
@@ -312,7 +315,6 @@ public class PlayerController : MonoBehaviour {
 			Jump();
 		}
 		if (PlayerWantsToInterruptJump()) {
-			Debug.Log("cancelled jump");
 			targetVelocity.y = Mathf.Min(targetVelocity.y, earlyJumpTerminationVelocity);
 		}
 	}
@@ -335,8 +337,8 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// When executed, the PlayerController stops receiving input from the player. If it's already
-	/// disabled, does nothing.
+	/// When executed, the PlayerController starts receiving input from the player. If it's already
+	/// enabled, does nothing.
 	/// </summary>
 	public void Enable() {
 		enabled = true;
