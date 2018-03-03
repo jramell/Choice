@@ -55,6 +55,8 @@ MonoBehaviour:
   word: Llave
   definition: <i>f. </i> Instrumento que, introducido en una cerradura, permite activar
     el mecanismo que la abre y la cierra.
+  pickupDescription: "Presiona <color=\"orange\">[TAB]</color> cuando no est\xE9s
+    en una conversaci\xF3n para ver detalles"
   type: 1
   buff: {fileID: 0}
   equippable: {fileID: 0}

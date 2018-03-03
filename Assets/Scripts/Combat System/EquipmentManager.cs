@@ -25,6 +25,9 @@ public class EquipmentManager : MonoBehaviour {
 	public void Equip(Equippable equippable) {
 		//depending on animation strctur, window.setWeapon("none") before setting next weapon
 		//window.setweapon("new equippable") ... let the animator handle the rest
+		if(currentEquipment != null) {
+			currentEquipment.Unequip();
+		}
 		currentEquipment = equippable;
 		currentEquipment.OnEquipped();
 		if (equippable.DurationType == Duration.Type.Seconds) {

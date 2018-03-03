@@ -1,9 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class Key : Equippable {
 
+	#region Key Settings variable declarations
+	[Header("Key Settings")]
 	[SerializeField]
 	[Tooltip("Height of the hitbox relative to the center of the player")]
 	private float hitboxHeight;
@@ -11,7 +12,8 @@ public class Key : Equippable {
 	[SerializeField]
 	[Tooltip("Horizontal distance the hitbox will be when used, calculated from hitboxHeight towards the direction the player is looking to.")]
 	private float hitboxDistance;
-
+	#endregion
+	
 	/// <summary>
 	/// Distance the player wants the Key's hitbox to be on the current frame
 	/// </summary>
@@ -19,7 +21,8 @@ public class Key : Equippable {
 
 	private BoxCollider2D hitbox;
 
-	void Start() {
+	protected override void Start() {
+		base.Start();
 		hitbox.enabled = false;
 	}
 
@@ -42,18 +45,18 @@ public class Key : Equippable {
 	}
 
 	public override void OnBreak() {
+		base.OnBreak();
 		ResetAnimator();
 		gameObject.SetActive(false);
 		enabled = false;
 	}
 
 	public override void OnEquipped() {
+		base.OnEquipped();
 		if(hitbox == null) {
 			hitbox = GetComponent<BoxCollider2D>();
 			hitbox.isTrigger = true;
 		}
-		Debug.Log("Key was crafted");
-		remainingDuration = duration;
 		enabled = true;
 		gameObject.SetActive(true);
 		//handle player animator's state -- UI code that handles that the key is seen for the first time
@@ -96,5 +99,11 @@ public class Key : Equippable {
 			openableCollidedWith.OnOpened();
 			remainingDuration--;
 		}
+	}
+
+	public override void Unequip() {
+		ResetAnimator();
+		gameObject.SetActive(false);
+		enabled = false;
 	}
 }

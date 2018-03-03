@@ -91,7 +91,12 @@ public class InteractionManager : MonoBehaviour {
 	}
 
 	private void ShowActionAvailablePrompt() {
-		actionAvailablePrompt.text = "[F] " + currentTrigger.InteractionType();
+		//There should be a LocalizationManager here, but since first language is spanish, let's just say...
+		string interactionPrompt = "";
+		if(currentTrigger.InteractionType() == Interaction.Type.Talk) {
+			interactionPrompt = "Hablar";
+		}
+		actionAvailablePrompt.text = "[F] " + interactionPrompt;
 		actionAvailablePrompt.gameObject.SetActive(true);
 	}
 

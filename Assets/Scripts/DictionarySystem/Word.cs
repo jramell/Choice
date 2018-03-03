@@ -6,6 +6,9 @@ public class Word : MonoBehaviour {
 		Buff, Equip
 	}
 
+	#region Word Settings variable declarations
+	[Header("Word Settings")]
+
 	[SerializeField]
 	private Sprite icon;
 
@@ -16,6 +19,10 @@ public class Word : MonoBehaviour {
 	[SerializeField]
 	private string definition;
 
+	[TextArea(3, 10)]
+	[SerializeField]
+	private string pickupDescription;
+
 	[SerializeField]
 	private Word.EffectType type;
 
@@ -24,6 +31,7 @@ public class Word : MonoBehaviour {
 
 	[Tooltip("Equippable to be equipped to the player when this word is used. If word doesn't have EffectType Equiṕ, nothing is done with this")]
 	public Equippable equippable;
+	#endregion
 
 	public Sprite Icon {
 		get { return icon; }
@@ -40,6 +48,10 @@ public class Word : MonoBehaviour {
 
 	public Word.EffectType Type {
 		get { return type; }
+	}
+
+	public string PickupDescription {
+		get { return pickupDescription; }
 	}
 
 	public void Craft() {

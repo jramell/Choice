@@ -12,17 +12,14 @@ using UnityEngine;
 /// </summary>
 public class SystemManager : MonoBehaviour {
 
+	public DialogController dialogController;
+
 	private static SystemManager instance;
 	private PauseMenuController pauseMenuController;
 	private ActionController actionController;
 
 	void Awake() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
 	}
 
 	public static SystemManager Instance {
@@ -111,16 +108,16 @@ public class SystemManager : MonoBehaviour {
 		SuspendInteraction();
 		DisablePauseMenu();
 		DisableActionInput();
-		PauseGame();
+		//PauseGame(); --might be necessary in the future, but not really right now
 		DisablePlayerMenu();
 	}
 
 	private void TransitionFromPickupUI() {
 		AwakeInteraction();
-		EnablePauseMenu();
-		EnableActionInput();
 		UnpauseGame();
-		EnablePlayerMenu();
+		//assumes that the pickup UI is returning towards a conversation. If this stops being the case, code must
+		//be changed
+		dialogController.AdvanceConversation(); 
 	}
 
 	#endregion

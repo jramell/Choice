@@ -9,7 +9,7 @@ using UnityEngine;
 /// If working on a mobile version, it should be enough to make it a listener of the UI element that would 
 /// </summary>
 [RequireComponent(typeof(Collider2D))]	
-public class DialogController : MonoBehaviour {
+public class DialogController : MonoBehaviour{
 
 	/// <summary>
 	/// The talking entity that the player wants to interact with when the DialogInputManager is active.
@@ -49,10 +49,10 @@ public class DialogController : MonoBehaviour {
 	}
 
 	private bool ButtonToTalkPressed() {
-		return Input.GetKeyDown(KeyCode.F);
+		return Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow);
 	}
 
-	private void AdvanceConversation() {
+	public void AdvanceConversation() {
 		DialogManager.Instance.AdvanceDialog(currentTalker.Talk());
 	}
 

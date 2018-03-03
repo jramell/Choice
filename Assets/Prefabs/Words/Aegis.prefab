@@ -52,10 +52,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  word: "\xC9gida"
-  definition: "1. <i>f.</i> escudo (\u2016 arma defensiva).\r\n\r\n2. <i>f.</i> Protecci\xF3n,
-    defensa."
+  word: Electricidad
+  definition: "f. <i>F\xEDs</i> Fuerza que se manifiesta por la atracci\xF3n o repulsi\xF3n
+    entre part\xEDculas cargadas, originada por la existencia de electrones y protones"
+  pickupDescription: "Inserte aqu\xED descripci\xF3n cool"
   type: 1
   buff: {fileID: 0}
-  equippable: {fileID: 114019555002552036, guid: 3b3472d78ff7aaf4e9bb61dc28f84be2,
-    type: 2}
+  equippable: {fileID: 0}

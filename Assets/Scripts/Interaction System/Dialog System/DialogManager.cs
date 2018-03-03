@@ -122,11 +122,9 @@ public class DialogManager : MonoBehaviour {
 	}
 
 	private void FinishConversation() {
-		dialogText.gameObject.SetActive(false); //avoids re-drawing costs when emptying the dialogText's text.
 		dialogBoxAnimator.SetBool("Open", false);
 		HandleCurrentDialogCustomActionClose();
 		currentDialog = null;
-		//dialogText.text = "";
 		InteractionManager.Instance.UnregisterActiveInteraction();
 	}
 

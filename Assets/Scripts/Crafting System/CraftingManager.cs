@@ -1,7 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class CraftingManager : MonoBehaviour {
+
+	public CraftingController craftingController;
+
+	#region UI Settings variable declarations
+	[Header("UI Settings")]
 
 	/// <summary>
 	/// Color the text in the Input Field where player is crafting turns when it's a word in the dictionary
@@ -14,6 +20,10 @@ public class CraftingManager : MonoBehaviour {
 	/// </summary>
 	[Tooltip("Color the text in the Input Field where player is crafting turns when it's not a word in the dictionary")]
 	public Color uncraftableTextColor = Color.red;
+	#endregion
+
+	#region Sound Effect Settings variable declarations
+	[Header("Sound Effect Settings")]
 
 	/// <summary>
 	/// Sound effect that plays when the word currently written in the Input Field where player is crafting is in the player's dictionary
@@ -40,17 +50,14 @@ public class CraftingManager : MonoBehaviour {
 	[SerializeField]
 	[Tooltip("Sound effect that plays when the player tries to craft a word that can't be crafted")]
 	private AudioSource uncraftedSFX;
+	#endregion
 
 	private static CraftingManager instance;
-	private CraftingController craftingController;
+	private List<IOnCraftedListener> craftingListeners;
 
 	void Awake() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
+		craftingListeners = new List<IOnCraftedListener>();
 	}
 
 	public static CraftingManager Instance {
@@ -88,6 +95,9 @@ public class CraftingManager : MonoBehaviour {
 				craftedSFX.Play();
 			}
 			craftedWord.Craft();
+			foreach(IOnCraftedListener listener in craftingListeners) {
+				listener.OnWordCrafted();
+			}
 			return true;
 		} else {
 			if(uncraftedSFX != null) {
@@ -99,5 +109,13 @@ public class CraftingManager : MonoBehaviour {
 
 	public bool IsCraftable(string word) {
 		return DictionaryManager.Instance.Contains(word);
+	}
+
+	public void AddCraftingListener(IOnCraftedListener listener) {
+		craftingListeners.Add(listener);
+	}
+
+	public void RemoveCraftingListener(IOnCraftedListener listener) {
+		craftingListeners.Remove(listener);
 	}
 }

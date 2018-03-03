@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
 public abstract class Equippable : Wearable {
+	
+	[Header("Equippable Settings")]
+	public AudioSource equipSoundEffect;
+	public AudioSource breakSoundEffect;
 
 	/// <summary>
 	/// Time that must pass between 
@@ -33,12 +37,21 @@ public abstract class Equippable : Wearable {
 	/// may have. Note that other effects such as animation and sound effects on-breaking are handled by the EquipmentManager,
 	/// since it handles the Equipment's lifetime.
 	/// </summary>
-	public abstract void OnBreak();
+	public virtual void OnBreak() {
+		if(breakSoundEffect != null) {
+			breakSoundEffect.Play();
+		}
+	}
 
 	/// <summary>
 	/// Executed when the equippable is equipped by the player
 	/// </summary>
 	public virtual void OnEquipped() {
-
+		if(equipSoundEffect != null) {
+			equipSoundEffect.Play();
+		}
+		remainingDuration = duration;
 	}
+
+	public abstract void Unequip();
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //Note: For this to work similarly to a normal 2D controller, check this video: https://www.youtube.com/watch?v=lRGZKZ-qypA
@@ -193,9 +191,14 @@ public class PlayerController : MonoBehaviour {
 		UpdateWallSlidingState();
 		ProcessWallSlidingInput();
 		LimitFallSpeed();
-		PlayerManager.Instance.UpdatePlayerOrientation(Mathf.Sign(targetVelocity.x));
 		if(float.IsNaN(targetVelocity.x)) {
 			targetVelocity.x = 0;
+		}
+		if(inputX != 0) {
+			PlayerManager.Instance.UpdatePlayerOrientation(Mathf.Sign(targetVelocity.x));
+		}
+		if (wallSlidingDirection != 0) {
+			PlayerManager.Instance.UpdatePlayerOrientation(-wallSlidingDirection);
 		}
 		rigidbody2D.velocity = targetVelocity;
 	}
@@ -259,6 +262,7 @@ public class PlayerController : MonoBehaviour {
 			HandleWallSlideUnstick();
 		}
 		if(PlayerWantsToJump()) {
+			inputX = Input.GetAxisRaw("Horizontal"); //shouldn't change from before, but it's an attempt to try to process stuff faster
 			bool playerWantsToClimbWall = inputX == wallSlidingDirection;
 			bool playerWantsToJumpOffWall = inputX == 0;
 			timeToWallUnstick = -1; //so time to wall unstick doesn't mess with X impulse on jump
