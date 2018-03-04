@@ -12,6 +12,7 @@ public class MovingPlatform : MonoBehaviour {
 
 	public float maxSpeed;
 
+	[Range(0.0001f, 100)]
 	[Tooltip("Time the platform will take to accelerate up to max speed")]
 	public float timeToMaxSpeed;
 	#endregion
@@ -29,20 +30,25 @@ public class MovingPlatform : MonoBehaviour {
 	private int currentPathIndex = 0;
 	private bool turnedOn = true;
 
-	private Vector2 currentDeceleration;
-	private float accelerationAmount;
+	private float accelerationAmount = 0;
+
+	private float velocity;
+	/// <summary>
+	/// In range [0, 1], where 0 means no distance from last origin and 1 means Vector2.Distance(lastOrigin.position, target.position)
+	/// </summary>
+	private float distanceFromLastOrigin = 0; 
 
 	/// <summary>
-	/// How much acceleration per second the platform needs in order to reach maxSpeed in timeToMaxSpeed seconds
+	/// Last point the Moving Platform was at
 	/// </summary>
-	private Rigidbody2D rigidbody2D;
-	private bool needToDecelerateInX = false;
-	private bool needToDecelerateInY = false;
+	private Vector2 lastOrigin;
+
+	/// <summary>
+	/// True if the platform is decelerating, false otherwise
+	/// </summary>
+	bool decelerating = false;
 	
 	void Start() {
-		rigidbody2D = GetComponent<Rigidbody2D>();
-		accelerationAmount = maxSpeed / timeToMaxSpeed;
-		currentDeceleration = new Vector2();
 		foreach(PlatformPathPoint point in path) {
 			if(point.isLocalPosition) {
 				point.position.x += transform.position.x;
@@ -55,70 +61,65 @@ public class MovingPlatform : MonoBehaviour {
 				point.position.y = transform.position.y;
 			}
 		}
+		SetNextTarget();
 	}
 
 	void Update() {
 		if(turnedOn) {
-			bool reachedTarget = Mathf.Approximately(Vector2.Distance(transform.position, path[currentPathIndex].position), 0f);
-			//Debug.Log("reachedTarget = " + reachedTarget + " distance = " + Vector2.Distance(transform.position, path[currentPathIndex].position) + ", vel = " + rigidbody2D.velocity);
-			//if (reachedTarget) {
-			//	Debug.Log("initiating wait in current platform");
-			//	StartCoroutine(WaitInCurrentPlatform());
-			//} else {
+			bool reachedTarget = distanceFromLastOrigin >= 0.99f || distanceFromLastOrigin < 0f;
+			if(reachedTarget) {
+				StartCoroutine(WaitInCurrentPlatform());
+			} else {
 				AccelerateTowardsTarget();
-			//}
+			}
 		}
 	}
 
 	private void AccelerateTowardsTarget() {
-		Vector3 distanceVector = path[currentPathIndex].position - transform.position;
-		distanceVector.z = 0; //so z position doesn't interfere with calculations
-		Vector2 directionVector = Vector3.Normalize(distanceVector);
-		Vector2 distanceNeededToDecelerate = Vector2.zero;
-		//Debug.Log("needToDecelerateY = " + needToDecelerateInY + ", decelerationY = " + currentDeceleration.y);
-		if (!needToDecelerateInX) {
-			currentDeceleration.x = -rigidbody2D.velocity.x / path[currentPathIndex].stopTime; //from Vf = at + Vo
-			distanceNeededToDecelerate.x = DistanceNeededToDecelerateToFullStop(rigidbody2D.velocity.x, currentDeceleration.x, path[currentPathIndex].stopTime);
-			needToDecelerateInX = !Mathf.Approximately(rigidbody2D.velocity.x, 0) && distanceVector.x <= distanceNeededToDecelerate.x;
+		float stopTime = overrideStopTime? stopTimeOverride : path[currentPathIndex].stopTime;
+		//deceleration that needs to be applied to the platform so it stops in stopTime seconds. Comes from:
+		//Vf = Vo + a*t -- Vf = 0, so equation becomes a = -Vo/t
+		float deceleration = -velocity / stopTime;
+		//the platform must start decelerating at this distance if it wants to stop just as it's reaching its target. Comes from:
+		//s = s_o + Vo*t + (a*t^2)/2 -- since we're interested in distance relative to the platform, s_o = 0
+		float decelerateThreshold = velocity * stopTime + 0.5f * deceleration * stopTime * stopTime;
+		float remainingDist = 1 - distanceFromLastOrigin;
+		if(remainingDist <= decelerateThreshold && !decelerating) {
+			accelerationAmount = deceleration;
+			decelerating = true;
 		}
-		if(!needToDecelerateInY) {
-			currentDeceleration.y = -rigidbody2D.velocity.y / path[currentPathIndex].stopTime;
-			Debug.Log("current Y velocity = " + rigidbody2D.velocity.y + ", currentDecelerationY = " + currentDeceleration.y);
-			distanceNeededToDecelerate.y = DistanceNeededToDecelerateToFullStop(rigidbody2D.velocity.y, currentDeceleration.y, path[currentPathIndex].stopTime);
-			needToDecelerateInY = !Mathf.Approximately(rigidbody2D.velocity.y, 0) && distanceVector.y <= distanceNeededToDecelerate.y;
-		}
-		float effectiveXAcceleration = needToDecelerateInX ? currentDeceleration.x : accelerationAmount;
-		float effectiveYAcceleration = needToDecelerateInY ? currentDeceleration.y : accelerationAmount;
-		AccelerateTowards(directionVector, effectiveXAcceleration, effectiveYAcceleration);
+		velocity += accelerationAmount * Time.deltaTime;
+		float maxSpeedScaled = maxSpeed / Vector2.Distance(lastOrigin, path[currentPathIndex].position);
+		velocity = Mathf.Clamp(velocity, -maxSpeedScaled, maxSpeedScaled);
+		distanceFromLastOrigin += velocity * Time.deltaTime;
+		transform.position = Vector2.MoveTowards(lastOrigin, path[currentPathIndex].position, 
+						distanceFromLastOrigin * Vector2.Distance(lastOrigin, path[currentPathIndex].position));
 	}
 
-	private void AccelerateTowards(Vector2 direction, float accelerationX, float accelerationY) {
-		direction *= Time.deltaTime;
-		rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x + direction.x * accelerationX,
-			rigidbody2D.velocity.y + direction.y * accelerationY);
-		rigidbody2D.velocity = new Vector2(Mathf.Clamp(rigidbody2D.velocity.x, -maxSpeed, maxSpeed),
-										   Mathf.Clamp(rigidbody2D.velocity.y, -maxSpeed, maxSpeed));
+	private void SetNextTarget() {
+		accelerationAmount = maxSpeed / timeToMaxSpeed;
+		lastOrigin = transform.position;
+		accelerationAmount /= Vector2.Distance(lastOrigin, path[currentPathIndex].position);
 	}
 
-	private float DistanceNeededToDecelerateToFullStop(float currentVelocity, float deceleration, float stopTime) {
-		//x = x_0 + t*Vo + (a*t^2)/2 -- x_0 is 0, since we're calculating distance relative to local position
-		float distance = (currentDeceleration.x * stopTime * stopTime) / 2;
-		distance += currentVelocity * stopTime;
-		return distance;
+	private void UpdateMovementState() {
+		decelerating = false;
+		distanceFromLastOrigin = 0;
+		velocity = 0;
+		++currentPathIndex;
+		if(currentPathIndex == path.Count) {
+			currentPathIndex = 0;
+		}
+		SetNextTarget();
 	}
 
 	private IEnumerator WaitInCurrentPlatform() {
 		enabled = false;
 		yield return new WaitForSeconds(path[currentPathIndex].stayTime);
-		++currentPathIndex;
-		if(currentPathIndex == path.Count) {
-			currentPathIndex = 0;
-		}
+		UpdateMovementState();
 		if(turnedOn) {
 			enabled = true;
 		}
-		needToDecelerateInY = false;
-		needToDecelerateInX = false;
 	}
 
 	public void TurnOn() {
@@ -130,7 +131,18 @@ public class MovingPlatform : MonoBehaviour {
 		turnedOn = false;
 		enabled = false;
 	}
-	//void OnCollisionEnter2D()
+
+	void OnCollisionEnter2D(Collision2D col) {
+		if(col.gameObject.tag == "Player") {
+			col.transform.SetParent(transform);
+		}
+	}
+
+	void OnCollisionExit2D(Collision2D col) {
+		if (col.gameObject.tag == "Player") {
+			col.transform.SetParent(null);
+		}
+	}
 }
 
 [System.Serializable]
