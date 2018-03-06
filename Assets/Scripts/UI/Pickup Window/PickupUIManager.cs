@@ -94,6 +94,7 @@ public class PickupUIManager : MonoBehaviour {
 	}
 
 	private IEnumerator AnimatePickupUI() {
+		pickupCanvasGroup.alpha = 1;
 		yield return new WaitForSecondsRealtime(backgroundConfig.startDelay);
 		backgroundImage.gameObject.SetActive(true); //for performance reasons, background is disabled at the start of the animation
 		UIUtils.Instance.FadeGraphic(backgroundImage, backgroundConfig.fadeTime, backgroundConfig.finalAlpha, backgroundConfig.preFadeSound);

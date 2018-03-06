@@ -29,16 +29,15 @@ public class InteractionManager : MonoBehaviour {
 	private Interaction.Type activeInteractionType;
 
 	void Awake() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
 	}
 
 	public static InteractionManager Instance {
 		get { return instance; }
+	}
+
+	public Interaction.Type ActiveInteractionType {
+		get { return activeInteractionType; }
 	}
 
 	/// <summary>
@@ -80,9 +79,9 @@ public class InteractionManager : MonoBehaviour {
 
 	public void UnregisterActiveInteraction() {
 		ShowActionAvailablePrompt();
-		activeInteractionType = Interaction.Type.None;
 		playerController.Enable();
 		SystemManager.Instance.UnregisterActiveSystem(GameSystem.Type.Interaction);
+		activeInteractionType = Interaction.Type.None;
 	}
 
 	private void HideActionAvailablePrompt() {
@@ -93,8 +92,10 @@ public class InteractionManager : MonoBehaviour {
 	private void ShowActionAvailablePrompt() {
 		//There should be a LocalizationManager here, but since first language is spanish, let's just say...
 		string interactionPrompt = "";
-		if(currentTrigger.InteractionType() == Interaction.Type.Talk) {
+		if(currentTrigger.InteractionType () == Interaction.Type.Talk) {
 			interactionPrompt = "Hablar";
+		} else if(currentTrigger.InteractionType () == Interaction.Type.Inspect) {
+			interactionPrompt = "Inspeccionar";
 		}
 		actionAvailablePrompt.text = "[F] " + interactionPrompt;
 		actionAvailablePrompt.gameObject.SetActive(true);

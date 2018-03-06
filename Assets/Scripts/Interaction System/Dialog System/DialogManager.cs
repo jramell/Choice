@@ -35,12 +35,7 @@ public class DialogManager : MonoBehaviour {
 	private CharacterParser characterParser;
 
 	void Awake() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
 	}
 
 	void Start() {

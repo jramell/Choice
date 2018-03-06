@@ -18,6 +18,12 @@ public class SystemManager : MonoBehaviour {
 	private PauseMenuController pauseMenuController;
 	private ActionController actionController;
 
+//	private class SystemState {
+//		bool pauseMenuControllerEnabled;
+//		bool actionControllerEnabled;
+//		GameSystem.Type activeSystem;
+//	}
+
 	void Awake() {
 		instance = this;
 	}
@@ -104,7 +110,7 @@ public class SystemManager : MonoBehaviour {
 		EnableActionInput();
 	}
 
-	private void TransitionToPickupUI() {
+	private void TransitionToPickupUI() { //this is the bug!
 		SuspendInteraction();
 		DisablePauseMenu();
 		DisableActionInput();
@@ -117,7 +123,12 @@ public class SystemManager : MonoBehaviour {
 		UnpauseGame();
 		//assumes that the pickup UI is returning towards a conversation. If this stops being the case, code must
 		//be changed
-		dialogController.AdvanceConversation(); 
+		if (InteractionManager.Instance.ActiveInteractionType == Interaction.Type.Talk) {
+			dialogController.AdvanceConversation(); 
+		} else {
+			EnablePlayerMenu();
+			EnableActionInput();
+		}
 	}
 
 	#endregion
@@ -136,7 +147,6 @@ public class SystemManager : MonoBehaviour {
 	}
 
 	private void EnablePlayerMenu() {
-		//DictionaryWindowManager.Instance.DisableDictionaryWindowController();
 		MenuNavigationManager.Instance.EnablePlayerMenuController();
 	}
 

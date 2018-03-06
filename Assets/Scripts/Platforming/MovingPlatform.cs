@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))] //needs to collide with player
-public class MovingPlatform : MonoBehaviour {
+public class MovingPlatform : MonoBehaviour, IActivable {
+
+	[Tooltip("Should the platform start activated?")]
+	public bool startsOn;
+
 	[Tooltip("Path the moving platform will follow. Once it reaches the end, it will go back to the beginning. It will follow it in order")]
 	public List<PlatformPathPoint> path;
 
@@ -62,6 +66,9 @@ public class MovingPlatform : MonoBehaviour {
 			}
 		}
 		SetNextTarget();
+		if(!startsOn) {
+			Deactivate();
+		}
 	}
 
 	void Update() {
@@ -122,14 +129,22 @@ public class MovingPlatform : MonoBehaviour {
 		}
 	}
 
-	public void TurnOn() {
+	public void Activate() {
 		turnedOn = true;
 		enabled = true;
 	}
 
-	public void TurnOff() {
+	public void Deactivate() {
 		turnedOn = false;
 		enabled = false;
+	}
+
+	public void Toggle() {
+		if(turnedOn) {
+			Deactivate();
+		} else {
+			Activate();
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D col) {

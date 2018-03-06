@@ -5,7 +5,7 @@ public interface IInteractionTrigger {
 
 	/// <summary>
 	/// Called by the InteractionManager when the trigger is allowed to move on with its interaction, this is,
-	/// when it is the one the player can do right now.
+	/// when it is the one the player can do right now. This tells the trigger it's ok to listen for player input.
 	/// </summary>
 	void EnableInteraction();
 

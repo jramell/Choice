@@ -9,7 +9,19 @@ public class ElectricProjectile : Projectile {
 		if(shockableComponent != null) {
 			shockableComponent.ReceiveShock(shockStrength);
 		}
-		//Dissappear();
+		if(col.gameObject.tag != "Checkpoint") {
+			Dissappear();
+		}
+	}
+
+	void OnColissionEnter2D(Collision2D col) {
+		IShockable shockableComponent = col.gameObject.GetComponent<IShockable>();
+		if (shockableComponent != null) {
+			shockableComponent.ReceiveShock(shockStrength);
+		}
+		if(col.gameObject.tag != "Checkpoint") {
+			Dissappear();
+		}
 	}
 
 	private void Dissappear() {

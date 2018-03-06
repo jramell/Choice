@@ -68,7 +68,7 @@ public class UIUtils : MonoBehaviour {
 		float transitionStep = fadeStepLength / time;
 		float transitionAmount = transitionStep;
 		while (transitionAmount < 1) {
-			canvasGroup.alpha = Mathf.Lerp(originalAlpha, finalAlpha, transitionAmount);
+			canvasGroup.alpha = Mathf.SmoothStep(originalAlpha, finalAlpha, transitionAmount);
 			transitionAmount += transitionStep;
 			yield return new WaitForSecondsRealtime(fadeStepLength);
 		}

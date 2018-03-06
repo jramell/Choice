@@ -7,12 +7,7 @@ public class PickupManager : MonoBehaviour {
 	private static PickupManager instance;
 
 	void Awake() {
-		if (instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
 	}
 
 	public static PickupManager Instance {

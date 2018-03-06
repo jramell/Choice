@@ -60,6 +60,8 @@
      <Compile Include="Assets\Scripts\Collection System\PickupButton.cs" />
      <Compile Include="Assets\Scripts\Collection System\PickupManager.cs" />
      <Compile Include="Assets\Scripts\Combat System\Actionables\DoorPanel.cs" />
+     <Compile Include="Assets\Scripts\Combat System\Actionables\Generator.cs" />
+     <Compile Include="Assets\Scripts\Combat System\Actionables\Interfaces\IActivable.cs" />
      <Compile Include="Assets\Scripts\Combat System\Actionables\Interfaces\IOpenable.cs" />
      <Compile Include="Assets\Scripts\Combat System\Actionables\Interfaces\IShockable.cs" />
      <Compile Include="Assets\Scripts\Combat System\ActionController.cs" />
@@ -86,6 +88,10 @@
      <Compile Include="Assets\Scripts\Enums\Pickup.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />
      <Compile Include="Assets\Scripts\IController.cs" />
+     <Compile Include="Assets\Scripts\Interaction System\Chest System\Chest.cs" />
+     <Compile Include="Assets\Scripts\Interaction System\Chest System\ChestController.cs" />
+     <Compile Include="Assets\Scripts\Interaction System\Chest System\ChestTrigger.cs" />
+     <Compile Include="Assets\Scripts\Interaction System\Chest System\WordChest.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\CharacterParser.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Conversation.cs" />
      <Compile Include="Assets\Scripts\Interaction System\Dialog System\Dialog.cs" />
