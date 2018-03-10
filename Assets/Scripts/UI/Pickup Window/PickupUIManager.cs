@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Handles the part of the UI that appears when a pickup is obtained.
@@ -55,8 +56,11 @@ public class PickupUIManager : MonoBehaviour {
 	private bool isDismissing = false;
 	private bool visible = false;
 
+	private List<IPickupUIDismissedListener> dismissListeners;
+
 	void Awake() {
 		instance = this;
+		dismissListeners = new List<IPickupUIDismissedListener>();
 	}
 
 	void Start() {
@@ -75,6 +79,9 @@ public class PickupUIManager : MonoBehaviour {
 	private void AnnounceSystemDismissal() {
 		SystemManager.Instance.UnregisterActiveSystem(GameSystem.Type.PickupUI);
 		visible = false;
+		foreach(IPickupUIDismissedListener listener in dismissListeners) {
+			listener.OnPickupUIDismissed();
+		}
 	}
 
 	public void DisplayWithWord(Word word) {
@@ -93,11 +100,18 @@ public class PickupUIManager : MonoBehaviour {
 		StartCoroutine(FadeOutWindow());
 	}
 
+	public void AddDismissListener(IPickupUIDismissedListener listener) {
+		dismissListeners.Add(listener);
+	}
+
+	/// <summary>
+	/// Handles the animation that happens when a new word is acquired
+	/// </summary>
 	private IEnumerator AnimatePickupUI() {
 		pickupCanvasGroup.alpha = 1;
-		yield return new WaitForSecondsRealtime(backgroundConfig.startDelay);
+		//yield return new WaitForSecondsRealtime(backgroundConfig.startDelay);
 		backgroundImage.gameObject.SetActive(true); //for performance reasons, background is disabled at the start of the animation
-		UIUtils.Instance.FadeGraphic(backgroundImage, backgroundConfig.fadeTime, backgroundConfig.finalAlpha, backgroundConfig.preFadeSound);
+		UIUtils.Instance.FadeGraphic(backgroundImage, backgroundConfig.fadeTime, backgroundConfig.finalAlpha, backgroundConfig.preFadeSound, backgroundConfig.startDelay);
 		yield return new WaitForSecondsRealtime(backgroundConfig.fadeTime + newPickupConfig.startDelay);
 
 		//time to show text that says "New word acquired!" or something alike. Code could change an

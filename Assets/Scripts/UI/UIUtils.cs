@@ -24,18 +24,18 @@ public class UIUtils : MonoBehaviour {
 	/// <param name="timeToFadeIn">Time the image will take to get to the endAlpha passed as a parameter</param>
 	/// <param name="endAlpha">Alpha the image will have once it has completely faded in</param>
 	/// <param name="fadeStepLength">Amount of time between each alpha change for the image. The lower, the more performance cost</param>
-	public void FadeGraphic(MaskableGraphic graphic, float timeToFade, float endAlpha=1, AudioSource preFadeSound=null, float fadeStepLength=0.01f) {
+	public void FadeGraphic(MaskableGraphic graphic, float timeToFade, float endAlpha=1, AudioSource preFadeSound=null, float fadeStepLength=0.01f, float startDelay=0f) {
 		if(preFadeSound != null) {
 			preFadeSound.Play();
 		}
-		StartCoroutine(_FadeGraphic(graphic, timeToFade, endAlpha, fadeStepLength));
+		StartCoroutine(_FadeGraphic(graphic, startDelay, timeToFade, endAlpha, fadeStepLength));
 	}
 
-	public void FadeCanvasGroup(CanvasGroup canvasGroup, float timeToFade, float endAlpha=1, AudioSource preFadeSound = null, float fadeStepLength = 0.01f) {
+	public void FadeCanvasGroup(CanvasGroup canvasGroup, float timeToFade, float endAlpha=1, AudioSource preFadeSound = null, float fadeStepLength = 0.01f, float startDelay=0f) {
 		if (preFadeSound != null) {
 			preFadeSound.Play();
 		}
-		StartCoroutine(_FadeCanvasGroup(canvasGroup, timeToFade, endAlpha, fadeStepLength));
+		StartCoroutine(_FadeCanvasGroup(canvasGroup, startDelay, timeToFade, endAlpha, fadeStepLength));
 	}
 
 	public void MakeGraphicInvisible(MaskableGraphic graphic) {
@@ -46,7 +46,8 @@ public class UIUtils : MonoBehaviour {
 		graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, 1);
 	}
 
-	private static IEnumerator _FadeGraphic(MaskableGraphic graphic, float time, float finalAlpha, float fadeStepLength) {
+	private static IEnumerator _FadeGraphic(MaskableGraphic graphic, float startDelay, float time, float finalAlpha, float fadeStepLength) {
+		yield return new WaitForSecondsRealtime(startDelay);
 		if(Mathf.Approximately(time, 0) || time < 0f) {
 			instance.MakeGraphicOpaque(graphic);
 		} else {
@@ -63,7 +64,8 @@ public class UIUtils : MonoBehaviour {
 
 	}
 
-	private static IEnumerator _FadeCanvasGroup(CanvasGroup canvasGroup, float time, float finalAlpha, float fadeStepLength) {
+	private static IEnumerator _FadeCanvasGroup(CanvasGroup canvasGroup, float startDelay, float time, float finalAlpha, float fadeStepLength) {
+		yield return new WaitForSecondsRealtime(startDelay);
 		float originalAlpha = canvasGroup.alpha;
 		float transitionStep = fadeStepLength / time;
 		float transitionAmount = transitionStep;

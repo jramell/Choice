@@ -22,6 +22,6 @@ public class Lily : Talker, IOnCraftedListener { //should listen to crafting sys
 
 	public void OnWordCrafted() {
 		keyCrafted = true;
-		CraftingManager.Instance.RemoveCraftingListener(this);
+		//CraftingManager.Instance.RemoveCraftingListener(this);
 	}
 }

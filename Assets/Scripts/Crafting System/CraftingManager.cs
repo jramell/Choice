@@ -95,6 +95,9 @@ public class CraftingManager : MonoBehaviour {
 				craftedSFX.Play();
 			}
 			craftedWord.Craft();
+			if(craftingListeners == null) {
+
+			}
 			foreach(IOnCraftedListener listener in craftingListeners) {
 				listener.OnWordCrafted();
 			}

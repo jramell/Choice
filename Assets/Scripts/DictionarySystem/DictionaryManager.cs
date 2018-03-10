@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Maintains a list of words that have been acquired by the player
+/// </summary>
 public class DictionaryManager : MonoBehaviour {
 
 	private static DictionaryManager instance;
 	private Dictionary<string, Word> knownWords;
+	private List<IOnWordObtainedListener> listeners;
 
 	void Awake() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
+		listeners = new List<IOnWordObtainedListener>();
+		knownWords = new Dictionary<string, Word>();
 	}
 
 	public static DictionaryManager Instance {
@@ -23,11 +24,11 @@ public class DictionaryManager : MonoBehaviour {
 		if (word == null) {
 			return;
 		}
-		if(knownWords == null) {
-			knownWords = new Dictionary<string, Word>();
-		}
 		knownWords.Add(word.WordName.ToLower(), word);
 		DictionaryWindowManager.Instance.AddWord(word);
+		foreach (IOnWordObtainedListener listener in listeners) {
+			listener.OnWordObtained();
+		}
 	}
 
 	/// <summary>
@@ -47,5 +48,9 @@ public class DictionaryManager : MonoBehaviour {
 			knownWords.TryGetValue(wordName.ToLower(), out answer);
 		}
 		return answer;
+	}
+
+	public void AddWordObtainedListener(IOnWordObtainedListener listener) {
+		listeners.Add(listener);
 	}
 }

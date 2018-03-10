@@ -114,7 +114,7 @@ public class SystemManager : MonoBehaviour {
 		SuspendInteraction();
 		DisablePauseMenu();
 		DisableActionInput();
-		//PauseGame(); --might be necessary in the future, but not really right now
+		PauseGame(); 
 		DisablePlayerMenu();
 	}
 
@@ -147,11 +147,11 @@ public class SystemManager : MonoBehaviour {
 	}
 
 	private void EnablePlayerMenu() {
-		MenuNavigationManager.Instance.EnablePlayerMenuController();
+		PlayerMenuNavigationManager.Instance.EnablePlayerMenuController();
 	}
 
 	private void DisablePlayerMenu() {
-		MenuNavigationManager.Instance.DisablePlayerMenuController();
+		PlayerMenuNavigationManager.Instance.DisablePlayerMenuController();
 	}
 
 	private void SuspendInteraction() {

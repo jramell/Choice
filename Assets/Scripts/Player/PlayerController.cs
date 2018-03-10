@@ -108,6 +108,11 @@ public class PlayerController : MonoBehaviour {
 
 	#endregion
 
+	[Header("Sound Effect Settings")]
+	public AudioSource jumpSFX;
+
+	public AudioSource wallSlidingSFX;
+
 	#region Debug Settings definition
 	[Header("Debug Settings")]
 
@@ -162,8 +167,6 @@ public class PlayerController : MonoBehaviour {
 	/// </summary>
 	private Rigidbody2D rigidbody2D;
 
-	private bool isJumping = false;
-
 	#endregion
 
 	void Start() {
@@ -181,6 +184,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update() { //the order the state of things is updated and differents part of the input processed is important
+
+		//TODO: should probably check input state the frame the player unpauses the game. If its non-zero, keep the current
+		//controller internal state. Else, reset velocity effects related to input (other forces should still act on the player).
+		//That might get rid of the player "sliding" after unpausing.
+
 		targetVelocity = rigidbody2D.velocity; 
 		UpdateIsGrounded();
 		ProcessHorizontalMovementInput();
@@ -200,7 +208,23 @@ public class PlayerController : MonoBehaviour {
 		if (wallSlidingDirection != 0) {
 			PlayerManager.Instance.UpdatePlayerOrientation(-wallSlidingDirection);
 		}
+		HandlePlayingSoundEffects();
 		rigidbody2D.velocity = targetVelocity;
+	}
+
+	private void HandlePlayingSoundEffects() {
+		HandleWallSlidingSFX();
+	}
+
+	private void HandleWallSlidingSFX() {
+		if(wallSlidingSFX == null) {
+			return;
+		}
+		if(wallSlidingDirection == 0) {
+			wallSlidingSFX.Stop();
+		} else if(!wallSlidingSFX.isPlaying) {
+			wallSlidingSFX.Play();
+		}
 	}
 
 	private void LimitFallSpeed() {
@@ -306,9 +330,6 @@ public class PlayerController : MonoBehaviour {
 				Debug.DrawRay(groundChecks[i].position, Vector2.down * groundCheckDistance, Color.red);
 			}
 		}
-		if(isGrounded) {
-			isJumping = false;
-		}
 	}
 
 	/// <summary>
@@ -336,8 +357,10 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Jump() {
-		isJumping = true;
 		targetVelocity.y = jumpVelocity;
+		if(jumpSFX != null) {
+			jumpSFX.Play();
+		}
 	}
 
 	/// <summary>

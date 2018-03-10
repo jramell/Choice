@@ -34,10 +34,10 @@ public class SimpleDoorAnimator : DoorAnimator {
 		moveStepPerSecond = moveAmount / moveTime;
 		if(moveDirection == Direction.Up || moveDirection == Direction.Down) {
 			float verticalDirectionModifier = moveDirection == Direction.Up ? 1 : -1;
-			yChangePerStep = moveStepPerSecond * 0.015f * verticalDirectionModifier;
+			yChangePerStep = moveStepPerSecond * animationStepLength * verticalDirectionModifier;
 		} else {
 			float horizontalDirectionModifier = moveDirection == Direction.Right ? 1 : -1;
-			xChangePerStep = moveStepPerSecond * 0.015f * horizontalDirectionModifier;
+			xChangePerStep = moveStepPerSecond * animationStepLength * horizontalDirectionModifier;
 		}
 	}
 
@@ -58,8 +58,8 @@ public class SimpleDoorAnimator : DoorAnimator {
 	IEnumerator PlayOpenAnimation() {
 		while(currentMove < moveAmount) {
 			transform.position = new Vector2(transform.position.x + xChangePerStep, transform.position.y + yChangePerStep);
-			yield return new WaitForSeconds(0.015f);
-			currentMove += moveStepPerSecond * 0.015f;
+			yield return new WaitForSeconds(animationStepLength);
+			currentMove += moveStepPerSecond * animationStepLength;
 		}
 		currentMove = 0;
 		open = true;
@@ -69,8 +69,8 @@ public class SimpleDoorAnimator : DoorAnimator {
 	IEnumerator PlayCloseAnimation() {
 		while (currentMove < moveAmount) {
 			transform.position = new Vector2(transform.position.x - xChangePerStep, transform.position.y - yChangePerStep);
-			yield return new WaitForSeconds(0.015f);
-			currentMove += moveStepPerSecond * 0.015f;
+			yield return new WaitForSeconds(animationStepLength);
+			currentMove += moveStepPerSecond * animationStepLength;
 		}
 		currentMove = 0;
 		open = false;
