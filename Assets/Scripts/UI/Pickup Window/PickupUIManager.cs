@@ -45,6 +45,13 @@ public class PickupUIManager : MonoBehaviour {
 
 	#endregion
 
+	[Header("Sound Settings")]
+	[Tooltip("Sound that plays when the Pickup UI appears")]
+	public AudioSource appearSFX;
+
+	[Tooltip("Sound that loops after the appearSFX ends and while the UI isn't dismissed")]
+	public AudioSource staySFX;
+
 	#region Word Pickup Settings
 	[Header("Word Pickup Settings")]
 
@@ -108,10 +115,13 @@ public class PickupUIManager : MonoBehaviour {
 	/// Handles the animation that happens when a new word is acquired
 	/// </summary>
 	private IEnumerator AnimatePickupUI() {
+		if(appearSFX != null) {
+			appearSFX.Play();
+		}
 		pickupCanvasGroup.alpha = 1;
-		//yield return new WaitForSecondsRealtime(backgroundConfig.startDelay);
+		yield return new WaitForSecondsRealtime(backgroundConfig.startDelay);
 		backgroundImage.gameObject.SetActive(true); //for performance reasons, background is disabled at the start of the animation
-		UIUtils.Instance.FadeGraphic(backgroundImage, backgroundConfig.fadeTime, backgroundConfig.finalAlpha, backgroundConfig.preFadeSound, backgroundConfig.startDelay);
+		UIUtils.Instance.FadeGraphic(backgroundImage, backgroundConfig.fadeTime, backgroundConfig.finalAlpha, backgroundConfig.preFadeSound);
 		yield return new WaitForSecondsRealtime(backgroundConfig.fadeTime + newPickupConfig.startDelay);
 
 		//time to show text that says "New word acquired!" or something alike. Code could change an
@@ -127,12 +137,17 @@ public class PickupUIManager : MonoBehaviour {
 		pickupDescriptionText.gameObject.SetActive(true);
 		UIUtils.Instance.FadeGraphic(pickupDescriptionText, pickupDescriptionConfig.fadeTime, pickupDescriptionConfig.finalAlpha, pickupDescriptionConfig.preFadeSound);
 
+		yield return new WaitForSecondsRealtime(pickupDescriptionConfig.fadeTime);
+		if (staySFX != null) {
+			staySFX.Play();
+		}
 		pickupUIController.Enable();
 	}
 
 	private IEnumerator FadeOutWindow() {
 		isDismissing = true;
 		UIUtils.Instance.FadeCanvasGroup(pickupCanvasGroup, dismissConfig.fadeTime, 0, dismissConfig.preFadeSound);
+		staySFX.Stop();
 		yield return new WaitForSecondsRealtime(dismissConfig.fadeTime + 0.05f);
 		//deactivates UI components to avoid Unity redrawing them when pickup UI is inactive -- source: https://www.youtube.com/watch?v=_wxitgdx-UI
 		ResetState();

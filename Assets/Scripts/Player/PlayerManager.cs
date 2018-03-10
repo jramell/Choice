@@ -20,12 +20,7 @@ public class PlayerManager : MonoBehaviour {
 	#endregion
 
 	void Awake() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
 		playerState = new PlayerState();
 		playerState.Health = maxHealth;
 	}

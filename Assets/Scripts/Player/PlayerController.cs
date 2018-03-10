@@ -110,8 +110,8 @@ public class PlayerController : MonoBehaviour {
 
 	[Header("Sound Effect Settings")]
 	public AudioSource jumpSFX;
-
 	public AudioSource wallSlidingSFX;
+	public AudioSource landingSFX;
 
 	#region Debug Settings definition
 	[Header("Debug Settings")]
@@ -169,6 +169,9 @@ public class PlayerController : MonoBehaviour {
 
 	#endregion
 
+	private float previousWallSlidingDirection;
+	private bool previousIsGrounded;
+
 	void Start() {
 		rigidbody2D = GetComponent<Rigidbody2D>();	
 		timeToApex *= 10; //change unit of timeToApex so the following equations work correctly
@@ -210,20 +213,31 @@ public class PlayerController : MonoBehaviour {
 		}
 		HandlePlayingSoundEffects();
 		rigidbody2D.velocity = targetVelocity;
+		previousWallSlidingDirection = wallSlidingDirection;
 	}
 
 	private void HandlePlayingSoundEffects() {
 		HandleWallSlidingSFX();
+		HandleLandingSFX();
 	}
 
 	private void HandleWallSlidingSFX() {
 		if(wallSlidingSFX == null) {
 			return;
 		}
-		if(wallSlidingDirection == 0) {
-			wallSlidingSFX.Stop();
-		} else if(!wallSlidingSFX.isPlaying) {
+		bool wasWallSlidingPreviousFrame = previousWallSlidingDirection != 0;
+		if (!wasWallSlidingPreviousFrame && isWallSliding) {
 			wallSlidingSFX.Play();
+		}
+	}
+
+	private void HandleLandingSFX() {
+		if (landingSFX == null) {
+			return;
+		}
+		bool justLanded = !previousIsGrounded && isGrounded;
+		if (justLanded) {
+			landingSFX.Play();
 		}
 	}
 
@@ -323,6 +337,7 @@ public class PlayerController : MonoBehaviour {
 	/// Updates isGrounded according to the player position in the current frame
 	/// </summary>
 	private void UpdateIsGrounded() {
+		previousIsGrounded = isGrounded;
 		isGrounded = false;
 		for(int i = 0; i < groundChecks.Length && !isGrounded; i++) { 
 			isGrounded = Physics2D.Raycast(groundChecks[i].position, Vector2.down, groundCheckDistance, WhatIsGround);

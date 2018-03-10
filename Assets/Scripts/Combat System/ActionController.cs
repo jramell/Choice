@@ -16,11 +16,25 @@ public class ActionController : MonoBehaviour {
 	}
 
 	private bool PlayerWantsToUseEquippedObject() {
-		return Input.GetAxis("Fire1") > 0;
+		if (EquipmentManager.Instance.CurrentEquipment == null) {
+			return false;
+		}
+		if (EquipmentManager.Instance.CurrentEquipment.UseInputType == EquipmentInput.Type.KeyPressed) {
+			return Input.GetAxis("Fire1") > 0;
+		} else {
+			return Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0);
+		}
 	}
 
 	private bool PlayerWantsToStopUsingEquippedObject() {
-		return Input.GetAxis("Fire1") <= 0;
+		if (EquipmentManager.Instance.CurrentEquipment == null) {
+			return false;
+		}
+		if (EquipmentManager.Instance.CurrentEquipment.UseInputType == EquipmentInput.Type.KeyPressed) {
+			return Input.GetAxis("Fire1") <= 0;
+		} else {
+			return Input.GetKeyUp(KeyCode.X) || Input.GetMouseButtonUp(0);
+		}
 	}
 
 	public void Enable() {

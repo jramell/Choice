@@ -6,6 +6,10 @@ public abstract class Equippable : Wearable {
 	public AudioSource equipSoundEffect;
 	public AudioSource breakSoundEffect;
 
+	[SerializeField]
+	[Tooltip("If KeyDown, equippable will only be used the moment the player presses the key down. Else, will use it while the key is pressed")]
+	private EquipmentInput.Type useInputType;
+
 	/// <summary>
 	/// Time that must pass between 
 	/// </summary>
@@ -18,6 +22,10 @@ public abstract class Equippable : Wearable {
 			lastTimeUsed = Time.time;
 			OnUsed();
 		}
+	}
+
+	public EquipmentInput.Type UseInputType {
+		get { return useInputType; }
 	}
 
 	/// <summary>

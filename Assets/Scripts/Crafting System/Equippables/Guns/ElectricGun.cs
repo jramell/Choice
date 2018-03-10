@@ -4,16 +4,22 @@ public class ElectricGun : Equippable {
 
 	#region Projectile Spawn Settings variable declarations
 	[Header("Projectile Spawn Settings")]
+	public Transform player;
+
 	[Tooltip("Prefab of the electric projectile the gun shoots")]
 	public GameObject projectilePrefab;
 
 	public Transform projectileSpawn;
 
+	[Header("Sound Settings")]
+	[SerializeField]
+	private AudioSource shootSoundEffect;
+
 	[Tooltip("Horizontal distance from the player's center the spawn point for the projectile will have")]
-	public float shootSpawnHorizontalDistance;
+	private float shootSpawnHorizontalDistance;
 
 	[Tooltip("Vertical distance from the player's center the spawn point for the projectile will have")]
-	public float shootSpawnVerticalDistance;
+	private float shootSpawnVerticalDistance;
 
 	#endregion
 
@@ -24,13 +30,19 @@ public class ElectricGun : Equippable {
 
 	[Tooltip("The speed in units per second the gun's projectiles should have")]
 	public float projectileSpeed;
+
 	#endregion
 
 	protected override void Start() {
 		base.Start();
+		shootSpawnHorizontalDistance = Mathf.Abs(projectileSpawn.transform.position.x - player.position.x);
+		shootSpawnVerticalDistance = Mathf.Abs(projectileSpawn.transform.position.y - player.position.y);
 		ElectricProjectile projectileComponent = projectilePrefab.GetComponent<ElectricProjectile>();
 		projectileComponent.shockStrength = shockStrength;
 		projectileComponent.speed = projectileSpeed;
+		if(player == null) {
+			player = GameObject.FindGameObjectWithTag("Player").transform;
+		}
 	}
 
 	void Update() {
@@ -59,6 +71,9 @@ public class ElectricGun : Equippable {
 	protected override void OnUsed() {
 		//shoot projectile... which is pooled, eventually
 		SpawnElectricProjectile();
+		if(shootSoundEffect != null) {
+			shootSoundEffect.Play();
+		}
 		remainingDuration--;
 	}
 

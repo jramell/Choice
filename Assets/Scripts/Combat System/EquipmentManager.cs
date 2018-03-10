@@ -6,12 +6,7 @@ public class EquipmentManager : MonoBehaviour {
 	private Equippable currentEquipment;
 
 	void Awake() {
-		if (instance == null) {
-			instance = this;
-		} else {
-			Destroy(gameObject);
-		}
-		DontDestroyOnLoad(gameObject);
+		instance = this;
 	}
 
 	public static EquipmentManager Instance {
@@ -60,6 +55,10 @@ public class EquipmentManager : MonoBehaviour {
 
 	private void Unequip() {
 		currentEquipment = null;
+	}
+
+	public Equippable CurrentEquipment {
+		get { return currentEquipment; }
 	}
 
 	private void HandleEquipmentRemainingDuration() {
