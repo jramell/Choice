@@ -1,10 +1,14 @@
-﻿/// <summary>
+﻿using UnityEngine;
+
+/// <summary>
 /// Holds variables related to player state within the world. Should only be modified by controllers through PlayerManager to
 /// avoid debugging nightmares. Does not update UI.
 /// </summary>
 public class PlayerState {
 
 	private float currentHealth;
+
+	private Vector2 playerVelocity;
 
 	/// <summary>
 	/// 1 if the player is looking to the right, -1 if they're looking to the left.
@@ -30,5 +34,10 @@ public class PlayerState {
 	public float PlayerOrientation {
 		get { return playerOrientation; }
 		set { playerOrientation = value; }
+	}
+
+	public Vector2 PlayerVelocity {
+		get { return playerVelocity; }
+		set { playerVelocity = value; }
 	}
 }

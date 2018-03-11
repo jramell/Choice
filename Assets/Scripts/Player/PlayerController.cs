@@ -214,6 +214,7 @@ public class PlayerController : MonoBehaviour {
 		HandlePlayingSoundEffects();
 		rigidbody2D.velocity = targetVelocity;
 		previousWallSlidingDirection = wallSlidingDirection;
+		PlayerManager.Instance.UpdatePlayerVelocity(rigidbody2D.velocity);
 	}
 
 	private void HandlePlayingSoundEffects() {

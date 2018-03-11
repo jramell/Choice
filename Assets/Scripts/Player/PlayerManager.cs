@@ -37,6 +37,10 @@ public class PlayerManager : MonoBehaviour {
 		playerState.PlayerOrientation = orientation;
 	}
 
+	public void UpdatePlayerVelocity(Vector2 velocity) {
+		playerState.PlayerVelocity = velocity;
+	}
+
 	public GameObject PlayerGameObject {
 		get {
 			InitializePlayerGameObject();

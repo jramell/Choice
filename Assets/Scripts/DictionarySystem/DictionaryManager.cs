@@ -53,4 +53,8 @@ public class DictionaryManager : MonoBehaviour {
 	public void AddWordObtainedListener(IOnWordObtainedListener listener) {
 		listeners.Add(listener);
 	}
+
+	public int WordCount() {
+		return knownWords.Count;
+	}
 }
