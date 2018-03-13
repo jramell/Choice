@@ -8,12 +8,6 @@ using UnityEngine;
 /// </summary>
 public class PlayerMenuController : MonoBehaviour {
 
-	/// <summary>
-	/// Game Object that contains the Player Menu's UI.
-	/// </summary>
-	[Tooltip("Object that contains the Player Menu's UI")]
-	public GameObject playerMenu;
-
 	void Update() {
 		if(PlayerWantsToOpenDictionary()) {
 			OpenDictionaryMenu();
@@ -26,7 +20,6 @@ public class PlayerMenuController : MonoBehaviour {
 
 	private void OpenDictionaryMenu() {
 		//window.setbool(open)
-		playerMenu.SetActive(true);
 		PlayerMenuNavigationManager.Instance.OpenPlayerMenu();
 	}
 

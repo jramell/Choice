@@ -16,7 +16,9 @@ public class CraftingController : MonoBehaviour {
 	/// <summary>
 	/// Text the current crafting input field had when CraftingController last checked its content.
 	/// </summary>
-	private string previousCraftingText; 
+	private string previousCraftingText;
+
+	private bool isInputTextValidWord;
 
 	void Start() {
 		enabled = false;
@@ -25,7 +27,7 @@ public class CraftingController : MonoBehaviour {
 	void Update() {
 		//check words written on input field
 		if(ShouldCheckIfInputTextValid()) {
-			if(IsInputTextValidWord()) {
+			if(_IsInputTextValidWord()) {
 				currentCraftingInputField.textComponent.color = CraftingManager.Instance.craftableTextColor;
 				if(CraftingManager.Instance.writtenCraftableSFX != null) {
 					CraftingManager.Instance.writtenCraftableSFX.Play();
@@ -55,8 +57,13 @@ public class CraftingController : MonoBehaviour {
 		return currentCraftingInputField.text != previousCraftingText;
 	}
 
-	private bool IsInputTextValidWord() {
+	private bool _IsInputTextValidWord() {
 		previousCraftingText = currentCraftingInputField.text;
-		return DictionaryManager.Instance.Contains(previousCraftingText);
+		isInputTextValidWord = DictionaryManager.Instance.Contains(previousCraftingText);
+		return isInputTextValidWord;
+	}
+
+	public bool IsInputTextValidWord {
+		get { return isInputTextValidWord; }
 	}
 }

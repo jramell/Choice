@@ -120,9 +120,9 @@ public class DictionaryWindowController : MonoBehaviour, IController {
 		if(craftWindowOpen) {
 			CloseCraftWindow();
 		}
+		playerMenu.SetActive(false);
 		PlayerMenuNavigationManager.Instance.ExitPlayerMenu();
 		//window.setbool(close) ...
-		playerMenu.SetActive(false);
 	}
 
 	private bool PlayerWantsToReturnInWindow() {

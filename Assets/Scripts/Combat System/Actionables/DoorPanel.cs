@@ -36,10 +36,10 @@ public class DoorPanel : MonoBehaviour, IOpenable {
 
 	private IEnumerator ToggleAttachedDoors() {
 		beingUsed = true;
+		if (panelOpenSFX != null) {
+			panelOpenSFX.Play();
+		}
 		foreach (DoorConfig doorConfig in attachedDoorsConfig) {
-			if (panelOpenSFX != null) {
-				panelOpenSFX.Play();
-			}
 			yield return new WaitForSeconds(doorConfig.openDelay);
 			doorConfig.doorAnimator.Toggle();
 		}

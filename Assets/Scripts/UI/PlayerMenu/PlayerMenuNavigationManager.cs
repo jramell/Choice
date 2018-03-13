@@ -8,6 +8,15 @@ using UnityEngine;
 /// </summary>
 public class PlayerMenuNavigationManager : MonoBehaviour {
 
+	/// <summary>
+	/// Game Object that contains the Player Menu's UI.
+	/// </summary>
+	[Tooltip("Object that contains the Player Menu's UI")]
+	public GameObject playerMenu;
+
+	public AudioSource dictionaryOpenSFX;
+	public AudioSource dictionaryCloseSFX;
+	
 	private static PlayerMenuNavigationManager instance;
 	private PlayerMenuController playerMenuController;
 	private DictionaryWindowController dictionaryController;
@@ -25,6 +34,7 @@ public class PlayerMenuNavigationManager : MonoBehaviour {
 	}
 
 	public void OpenPlayerMenu() {
+		playerMenu.SetActive(true);
 		FocusDictionary();
 		SystemManager.Instance.RegisterActiveSystem(GameSystem.Type.PlayerMenu);
 	}
@@ -45,9 +55,15 @@ public class PlayerMenuNavigationManager : MonoBehaviour {
 		foreach(IDictionaryWindowOpenedListener listener in dictionaryOpenedListeners) {
 			listener.OnDictionaryWindowOpened();
 		}
+		if(dictionaryOpenSFX != null) {
+			dictionaryOpenSFX.Play();
+		}
 	}
 
 	public void ExitPlayerMenu() {
+		if(dictionaryCloseSFX != null) {
+			dictionaryCloseSFX.Play();
+		}
 		currentWindowController.Disable();
 		SystemManager.Instance.UnregisterActiveSystem(GameSystem.Type.PlayerMenu);
 	}

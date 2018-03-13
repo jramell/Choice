@@ -287,6 +287,7 @@
     <Compile Include="Assets\Script\HrefManager.cs" />
     <Compile Include="Assets\Script\TextPic.cs" />
     <Compile Include="Assets\Script\UiManager.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Camera\Parallaxer.cs" />
     <Compile Include="Assets\Scripts\Collection System\PickupButton.cs" />
     <Compile Include="Assets\Scripts\Collection System\PickupManager.cs" />
@@ -347,6 +348,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\Prototype\FinishPrototype.cs" />
     <Compile Include="Assets\Scripts\Respawn System\RespawnController.cs" />
     <Compile Include="Assets\Scripts\Respawn System\RespawnManager.cs" />
     <Compile Include="Assets\Scripts\SystemManager.cs" />
