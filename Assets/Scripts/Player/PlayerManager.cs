@@ -12,17 +12,23 @@ public class PlayerManager : MonoBehaviour {
 	[Tooltip("The player's Max Health")]
 	private float maxHealth = 100;
 
+	public Animator playerAnimator;
+	public Transform playerSprite;
+
 	#region Internal variables definition
 	private static PlayerManager instance;
 	private PlayerState playerState;
 	private GameObject playerGameObject;
-	private Animator playerAnimator;
 	#endregion
 
 	void Awake() {
 		instance = this;
 		playerState = new PlayerState();
 		playerState.Health = maxHealth;
+	}
+
+	private void Start() {
+		InitializePlayerGameObject();
 	}
 
 	public static PlayerManager Instance {
@@ -34,11 +40,22 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	public void UpdatePlayerOrientation(float orientation) {
+		if(orientation == 0) {
+			return;
+		}
 		playerState.PlayerOrientation = orientation;
+		playerSprite.localScale = new Vector3(orientation, playerSprite.localScale.y, 
+			playerSprite.localScale.z);
+	}
+
+	public void UpdatePlayerGroundedState(bool isGrounded) {
+		playerAnimator.SetBool("IsGrounded", isGrounded);
 	}
 
 	public void UpdatePlayerVelocity(Vector2 velocity) {
 		playerState.PlayerVelocity = velocity;
+		playerAnimator.SetFloat("HorizontalSpeed", Mathf.Abs(playerState.PlayerVelocity.x));
+		playerAnimator.SetFloat("VerticalSpeed", playerState.PlayerVelocity.y);
 	}
 
 	public GameObject PlayerGameObject {
@@ -56,10 +73,12 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	private void InitializePlayerGameObject() {
-		if (playerGameObject == null) {
+		if(playerGameObject == null) {
 			playerGameObject = GameObject.FindGameObjectWithTag("Player");
 		}
-		playerAnimator = playerGameObject.GetComponent<Animator>();
+		if(playerAnimator == null) {
+			playerAnimator = playerGameObject.GetComponent<Animator>();
+		}
 	}
 
 	public void TakeDamage(int damage) {

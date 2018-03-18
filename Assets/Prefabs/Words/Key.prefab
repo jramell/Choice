@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc04d49b3e59c44e916300c68f99e85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: dc4dc044d7e5cf441b3239a1d2e8cb5e, type: 3}
   word: Llave
   definition: <i>f. </i> Instrumento que, introducido en una cerradura, permite activar
     el mecanismo que la abre y la cierra.

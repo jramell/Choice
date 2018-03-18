@@ -8,7 +8,7 @@ public class PlayerState {
 
 	private float currentHealth;
 
-	private Vector2 playerVelocity;
+	private Vector2 playerVelocity = Vector2.zero;
 
 	/// <summary>
 	/// 1 if the player is looking to the right, -1 if they're looking to the left.

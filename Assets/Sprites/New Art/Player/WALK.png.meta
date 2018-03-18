@@ -1,0 +1,462 @@
+fileFormatVersion: 2
+guid: f00063f35494d334294731a1a576a0b4
+timeCreated: 1521081340
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: WALK_0
+    21300002: WALK_1
+    21300004: WALK_2
+    21300006: WALK_3
+    21300008: WALK_4
+    21300010: WALK_5
+    21300012: WALK_6
+    21300014: WALK_7
+    21300016: WALK_8
+    21300018: WALK_9
+    21300020: WALK_10
+    21300022: WALK_11
+    21300024: WALK_12
+    21300026: WALK_13
+    21300028: WALK_14
+    21300030: WALK_15
+    21300032: WALK_16
+    21300034: WALK_17
+    21300036: WALK_18
+    21300038: WALK_19
+    21300040: WALK_20
+    21300042: WALK_21
+    21300044: WALK_22
+    21300046: WALK_23
+    21300048: WALK_24
+  externalObjects: {}
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 210
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - buildTarget: Standalone
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WALK_0
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 7174
+        width: 487
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_1
+      rect:
+        serializedVersion: 2
+        x: 2674
+        y: 7174
+        width: 447
+        height: 812
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_2
+      rect:
+        serializedVersion: 2
+        x: 4602
+        y: 7174
+        width: 407
+        height: 792
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_3
+      rect:
+        serializedVersion: 2
+        x: 6527
+        y: 7152
+        width: 391
+        height: 800
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_4
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 6078
+        width: 375
+        height: 804
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_5
+      rect:
+        serializedVersion: 2
+        x: 2703
+        y: 6078
+        width: 371
+        height: 816
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_6
+      rect:
+        serializedVersion: 2
+        x: 4648
+        y: 6078
+        width: 360
+        height: 834
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_7
+      rect:
+        serializedVersion: 2
+        x: 6558
+        y: 6078
+        width: 356
+        height: 851
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_8
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 5002
+        width: 360
+        height: 854
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_9
+      rect:
+        serializedVersion: 2
+        x: 2718
+        y: 5014
+        width: 360
+        height: 840
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_10
+      rect:
+        serializedVersion: 2
+        x: 4638
+        y: 5008
+        width: 371
+        height: 838
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_11
+      rect:
+        serializedVersion: 2
+        x: 6527
+        y: 5018
+        width: 417
+        height: 822
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_12
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 3942
+        width: 452
+        height: 808
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_13
+      rect:
+        serializedVersion: 2
+        x: 2688
+        y: 3935
+        width: 406
+        height: 803
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_14
+      rect:
+        serializedVersion: 2
+        x: 4638
+        y: 3908
+        width: 385
+        height: 804
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_15
+      rect:
+        serializedVersion: 2
+        x: 6543
+        y: 3904
+        width: 383
+        height: 810
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_16
+      rect:
+        serializedVersion: 2
+        x: 790
+        y: 2823
+        width: 378
+        height: 827
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_17
+      rect:
+        serializedVersion: 2
+        x: 2703
+        y: 2826
+        width: 375
+        height: 840
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_18
+      rect:
+        serializedVersion: 2
+        x: 4624
+        y: 2831
+        width: 370
+        height: 854
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_19
+      rect:
+        serializedVersion: 2
+        x: 6543
+        y: 2830
+        width: 370
+        height: 864
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_20
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 1746
+        width: 366
+        height: 880
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_21
+      rect:
+        serializedVersion: 2
+        x: 2704
+        y: 1744
+        width: 362
+        height: 882
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_22
+      rect:
+        serializedVersion: 2
+        x: 4618
+        y: 1744
+        width: 375
+        height: 881
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_23
+      rect:
+        serializedVersion: 2
+        x: 6511
+        y: 1759
+        width: 434
+        height: 855
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: WALK_24
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 666
+        width: 487
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    outline: []
+    physicsShape: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

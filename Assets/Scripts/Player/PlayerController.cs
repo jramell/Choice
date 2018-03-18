@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour {
 	[Tooltip("If object within WhatIsMask is closer than groundCheckDistance to any position in this list, the player will be considered grounded. There would normally be groundChecks in the player's feet")]
 	private Transform[] groundChecks;
 
+	[Tooltip("If checked, groundChecks positions will be the bounds of the Player's Box Collider")]
+	public bool autoSetupGroundChecks;
+
 	/// <summary>
 	/// If groundCheck is at this distance or less from an object in a layer within WhatIsMask, the player will be considered grounded
 	/// </summary>
@@ -184,6 +187,12 @@ public class PlayerController : MonoBehaviour {
 		maxFallSpeed *= -1;
 		maxSlidingSpeed *= -1;
 		timeToWallUnstick = wallStickTime;
+		if(autoSetupGroundChecks) {
+			BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+			groundChecks[0].position = boxCollider.bounds.min;
+			groundChecks[1].position = new Vector3(groundChecks[0].position.x + boxCollider.bounds.size.x, 
+										groundChecks[0].position.y, groundChecks[0].position.z);
+		}
 	}
 
 	void Update() { //the order the state of things is updated and differents part of the input processed is important
@@ -205,16 +214,19 @@ public class PlayerController : MonoBehaviour {
 		if(float.IsNaN(targetVelocity.x)) {
 			targetVelocity.x = 0;
 		}
+		float newOrientation = PlayerManager.Instance.PlayerState.PlayerOrientation;
 		if(inputX != 0) {
-			PlayerManager.Instance.UpdatePlayerOrientation(Mathf.Sign(targetVelocity.x));
-		}
+			newOrientation = Mathf.Sign(targetVelocity.x);
+		} 
 		if (wallSlidingDirection != 0) {
-			PlayerManager.Instance.UpdatePlayerOrientation(-wallSlidingDirection);
+			newOrientation = -wallSlidingDirection;
 		}
+		PlayerManager.Instance.UpdatePlayerOrientation(newOrientation);
+		previousWallSlidingDirection = wallSlidingDirection;
 		HandlePlayingSoundEffects();
 		rigidbody2D.velocity = targetVelocity;
-		previousWallSlidingDirection = wallSlidingDirection;
 		PlayerManager.Instance.UpdatePlayerVelocity(rigidbody2D.velocity);
+		PlayerManager.Instance.UpdatePlayerGroundedState(isGrounded);
 	}
 
 	private void HandlePlayingSoundEffects() {
@@ -250,7 +262,11 @@ public class PlayerController : MonoBehaviour {
 		inputX = Input.GetAxisRaw("Horizontal");
 		float accelerationTime = isGrounded ? accelerationTimeGrounded : accelerationTimeAirborne;
 		//Mathf.SmoothDamp handles acceleration, basically
-		targetVelocity.x = Mathf.SmoothDamp(rigidbody2D.velocity.x, inputX * speed, ref velocityXSmoothing, accelerationTime);
+		if(!isGrounded) {
+			targetVelocity.x = Mathf.SmoothDamp(rigidbody2D.velocity.x, inputX * speed, ref velocityXSmoothing, accelerationTime);
+		} else {
+			targetVelocity.x = inputX * speed;
+		}
 	}
 
 	private void UpdateWallSlidingState() {
